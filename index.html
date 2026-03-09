@@ -699,10 +699,10 @@
     <div id="buy">
       <div id="future-ticketing-widget">
         <p data-en="Secure online ticketing by Future Ticketing" data-es="Venta de entradas online segura por Future Ticketing">Secure online ticketing by Future Ticketing</p>
-        <!-- Future Ticketing widget renders here automatically via the scripts loaded in <head> -->
-        <div id="ft-widget-container" style="min-height:100px;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:.9rem">
-          <span data-en="Loading ticket widget…" data-es="Cargando sistema de entradas…">Loading ticket widget…</span>
-        </div>
+        <!--Future Ticketing API - START-->
+        <script type='text/javascript' src='https://embed.futureticketing.ie/ft67811c33c6bf8'></script>
+        <script type='text/javascript'>var FTicket = FT({});</script>
+        <!--Future Ticketing API - END-->
       </div>
     </div>
   </div>
