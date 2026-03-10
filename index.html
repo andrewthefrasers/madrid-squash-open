@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,300;0,400;0,600;0,700;1,400&family=Barlow+Condensed:wght@400;700;800&display=swap" rel="stylesheet"/>
+  <script type="text/javascript" src="https://embed.futureticketing.ie/ft67811c33c6bf8"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
@@ -690,13 +691,7 @@
         </ul>
       </div>
     </div>
-    
-    <div class="container">
-      <div class="tickets-header" style="text-align: center; margin-bottom: 40px;">
-        <h2 style="font-family: 'Bebas Neue'; font-size: 3rem;">Tickets & Hospitality</h2>
-      </div>
-      <div id="future-ticketing-widget"></div>
-    </div>
+
 
     <div id="buy">
     <div class="container">
@@ -945,20 +940,21 @@
   </div>
 </footer>
 <script type='text/javascript' src='https://embed.futureticketing.ie/ft67811c33c6bf8'></script>
-<script type="text/javascript">
-  // We use window.onload or simply place it at the end to ensure the DIV exists
+
+  <script type="text/javascript">
+  // This waits until everything (including the external FT script) is ready
   window.addEventListener('load', function() {
     if (typeof FT === "function") { 
-      // Replace 'YOUR_EVENT_ID' with the actual ID from your dashboard
       var FTicket = FT({
         container: "future-ticketing-widget"
-      }); 
-      console.log("Future Ticketing Initialized");
+      });
+      console.log("Ticketing initialized successfully!");
     } else {
-      console.error("Future Ticketing library (FT) not loaded");
+      console.error("The Future Ticketing library still hasn't loaded.");
     }
   });
 </script>
+
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 /* ======= NAV SCROLL ======= */
 const navbar = document.getElementById("navbar");
