@@ -1034,5 +1034,21 @@ if (hamburger && mobileNav) {
   hamburger.addEventListener("click", () => mobileNav.classList.toggle("open"));
 }
 </script>
+
+<script type="text/javascript">
+  window.addEventListener('load', function() {
+    console.log("Page loaded, checking for Future Ticketing library...");
+    
+    if (typeof FT === "function") { 
+      // This specifically targets the DIV ID above
+      var FTicket = FT({
+        container: "future-ticketing-widget"
+      }); 
+      console.log("Success: Future Ticketing Widget Initialized.");
+    } else {
+      console.error("Error: Future Ticketing library (FT) failed to load from the external URL.");
+    }
+  });
+</script>  
 </body>
 </html>
