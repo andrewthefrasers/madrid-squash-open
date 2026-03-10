@@ -690,16 +690,21 @@
         </ul>
       </div>
     </div>
-
-    <!-- FUTURE TICKETING WIDGET -->
-    <div id="buy">
-      <div id="future-ticketing-widget" class="ft-embed" data-event-id="ft67811c33c6bf8"></div>
-        <p data-en="Secure online ticketing by Future Ticketing" data-es="Venta de entradas online segura por Future Ticketing">Secure online ticketing by Future Ticketing</p>
-        <!--Future Ticketing API - START-->
-        <script type='text/javascript' src='https://embed.futureticketing.ie/ft67811c33c6bf8'></script>
-        <script type="text/javascript">if (typeof FT === "function") { var FTicket = FT({container: "future-ticketing-widget",eventId: "ft67811c33c6bf8"}); }</script>
-        <!--Future Ticketing API - END-->
+    
+    <div class="container">
+      <div class="tickets-header" style="text-align: center; margin-bottom: 40px;">
+        <h2 style="font-family: 'Bebas Neue'; font-size: 3rem;">Tickets & Hospitality</h2>
       </div>
+      <div id="future-ticketing-widget"></div>
+    </div>
+
+    <div id="buy">
+    <div class="container">
+      <div class="tickets-header" style="text-align: center; margin-bottom: 40px;">
+        <h2 style="font-family: 'Bebas Neue'; font-size: 3rem;">Tickets & Hospitality</h2>
+      </div>
+      <div id="future-ticketing-widget"></div>
+    </div>
     </div>
   </div>
 </section>
@@ -939,7 +944,21 @@
     </div>
   </div>
 </footer>
-
+<script type='text/javascript' src='https://embed.futureticketing.ie/ft67811c33c6bf8'></script>
+<script type="text/javascript">
+  // We use window.onload or simply place it at the end to ensure the DIV exists
+  window.addEventListener('load', function() {
+    if (typeof FT === "function") { 
+      // Replace 'YOUR_EVENT_ID' with the actual ID from your dashboard
+      var FTicket = FT({
+        container: "future-ticketing-widget"
+      }); 
+      console.log("Future Ticketing Initialized");
+    } else {
+      console.error("Future Ticketing library (FT) not loaded");
+    }
+  });
+</script>
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 /* ======= NAV SCROLL ======= */
 const navbar = document.getElementById("navbar");
