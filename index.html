@@ -250,8 +250,22 @@
     .player-info { min-width: 0; }
     .player-name { font-family: "Barlow Condensed", sans-serif; font-weight: 700; font-size: 1rem; color: var(--white); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .player-country { font-size: .75rem; color: var(--muted); font-family: "Barlow Condensed", sans-serif; }
-    .player-rank { margin-left: auto; font-family: "Barlow Condensed", sans-serif; font-weight: 700; font-size: .75rem; color: var(--gold); background: rgba(240,195,48,.1); padding: 4px 8px; border-radius: 2px; flex-shrink: 0; }
+    .player-rank { margin-left: auto; font-family: "Barlow Condensed", sans-serif; font-weight: 700; font-size: .75rem; color: var(--gold); background: rgba(240,195,48,.1); padding: 4px 8px; border-radius: 2px; flex-shrink: 0; font-variant-numeric: tabular-nums; }
+    /* tighter name layout to fit 24 cards in the grid cleanly */
+    .player-name { font-size: .95rem; white-space: normal; line-height: 1.2; }
+    .player-card { min-height: 66px; align-items: center; }
+    /* seed badge variants */
+    .player-seed.seed-group { font-size: .95rem; letter-spacing: -.02em; }       /* "9/16" */
+    .player-seed.seed-none  { color: var(--muted); font-size: 1.6rem; line-height: 1; } /* "—" */
+    .player-seed.seed-wc    { color: var(--gold); font-size: 1.4rem; }            /* confirmed WC */
+    .player-seed.seed-wc-tbd{ color: var(--muted); font-size: 1.4rem; }           /* qualifier WC */
+    .player-card.wildcard-confirmed { border-left: 3px solid var(--gold); padding-left: 15px; background: linear-gradient(90deg, rgba(240,195,48,.08), var(--navy2) 60%); }
+    .player-card.wildcard-tbd { border: 1px dashed rgba(123,160,187,.28); background: rgba(0,27,45,.5); padding: 17px; }
+    .player-card.wildcard-tbd .player-name { color: var(--muted); font-style: italic; }
+    .player-card.wildcard-tbd .player-rank { color: var(--muted); background: rgba(123,160,187,.08); }
     .draw-note { margin-top: 22px; text-align: center; color: var(--muted); font-size: .85rem; }
+    .draw-legend { display: flex; flex-wrap: wrap; gap: 18px 28px; justify-content: center; margin-top: 18px; font-family: "Barlow Condensed", sans-serif; font-size: .78rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+    .draw-legend span strong { color: var(--white); font-weight: 700; margin-right: 6px; }
 
     /* ======= NEWS ======= */
     #news { background: var(--navy2); }
@@ -715,16 +729,43 @@
     <span class="label" data-en="Tournament Draw" data-es="Cuadro del Torneo">Tournament Draw</span>
     <h2 class="section-title" data-en="Players &amp; Draw" data-es="Jugadores y Cuadro">Players &amp; Draw</h2>
     <div id="draw-men" class="draw-grid">
-      <div class="player-card"><span class="player-seed">1</span><div class="player-info"><div class="player-name">TBA</div><div class="player-country" data-en="Top Seed" data-es="1ª Cabeza de serie">Top Seed</div></div><span class="player-rank">TBC</span></div>
-      <div class="player-card"><span class="player-seed">2</span><div class="player-info"><div class="player-name">TBA</div><div class="player-country" data-en="2nd Seed" data-es="2ª Cabeza de serie">2nd Seed</div></div><span class="player-rank">TBC</span></div>
-      <div class="player-card"><span class="player-seed">3</span><div class="player-info"><div class="player-name">TBA</div><div class="player-country" data-en="3rd Seed" data-es="3ª Cabeza de serie">3rd Seed</div></div><span class="player-rank">TBC</span></div>
-      <div class="player-card"><span class="player-seed">4</span><div class="player-info"><div class="player-name">TBA</div><div class="player-country" data-en="4th Seed" data-es="4ª Cabeza de serie">4th Seed</div></div><span class="player-rank">TBC</span></div>
-      <div class="player-card"><span class="player-seed">5</span><div class="player-info"><div class="player-name">TBA</div><div class="player-country" data-en="5th Seed" data-es="5ª Cabeza de serie">5th Seed</div></div><span class="player-rank">TBC</span></div>
-      <div class="player-card"><span class="player-seed">6</span><div class="player-info"><div class="player-name">TBA</div><div class="player-country" data-en="6th Seed" data-es="6ª Cabeza de serie">6th Seed</div></div><span class="player-rank">TBC</span></div>
-      <div class="player-card"><span class="player-seed">7</span><div class="player-info"><div class="player-name">TBA</div><div class="player-country" data-en="7th Seed" data-es="7ª Cabeza de serie">7th Seed</div></div><span class="player-rank">TBC</span></div>
-      <div class="player-card"><span class="player-seed">8</span><div class="player-info"><div class="player-name">TBA</div><div class="player-country" data-en="8th Seed" data-es="8ª Cabeza de serie">8th Seed</div></div><span class="player-rank">TBC</span></div>
+      <!-- TOP 8 SEEDS -->
+      <div class="player-card"><span class="player-seed">1</span><div class="player-info"><div class="player-name">Henry Leung</div><div class="player-country">HKG</div></div><span class="player-rank">WR 54</span></div>
+      <div class="player-card"><span class="player-seed">2</span><div class="player-info"><div class="player-name">Iván Pérez</div><div class="player-country">ESP</div></div><span class="player-rank">WR 58</span></div>
+      <div class="player-card"><span class="player-seed">3</span><div class="player-info"><div class="player-name">Muhammad Asim Khan</div><div class="player-country">PAK</div></div><span class="player-rank">WR 69</span></div>
+      <div class="player-card"><span class="player-seed">4</span><div class="player-info"><div class="player-name">Mohamed Nasser</div><div class="player-country">EGY</div></div><span class="player-rank">WR 71</span></div>
+      <div class="player-card"><span class="player-seed">5</span><div class="player-info"><div class="player-name">Leandro Romiglio</div><div class="player-country">ARG</div></div><span class="player-rank">WR 73</span></div>
+      <div class="player-card"><span class="player-seed">6</span><div class="player-info"><div class="player-name">Yassin Elshafei</div><div class="player-country">EGY</div></div><span class="player-rank">WR 77</span></div>
+      <div class="player-card"><span class="player-seed">7</span><div class="player-info"><div class="player-name">Matthew Lai</div><div class="player-country">HKG</div></div><span class="player-rank">WR 83</span></div>
+      <div class="player-card"><span class="player-seed">8</span><div class="player-info"><div class="player-name">Macéo Levy</div><div class="player-country">FRA</div></div><span class="player-rank">WR 90</span></div>
+      <!-- 9/16 SEEDED (drawn into bracket positions 9-16) -->
+      <div class="player-card"><span class="player-seed seed-group">9/16</span><div class="player-info"><div class="player-name">Brice Nicolas</div><div class="player-country">FRA</div></div><span class="player-rank">WR 95</span></div>
+      <div class="player-card"><span class="player-seed seed-group">9/16</span><div class="player-info"><div class="player-name">Salim Khan</div><div class="player-country">USA</div></div><span class="player-rank">WR 108</span></div>
+      <div class="player-card"><span class="player-seed seed-group">9/16</span><div class="player-info"><div class="player-name">Ibrahim Elkabbani</div><div class="player-country">EGY</div></div><span class="player-rank">WR 110</span></div>
+      <div class="player-card"><span class="player-seed seed-group">9/16</span><div class="player-info"><div class="player-name">Abdelrahman Nassar</div><div class="player-country">EGY</div></div><span class="player-rank">WR 123</span></div>
+      <div class="player-card"><span class="player-seed seed-group">9/16</span><div class="player-info"><div class="player-name">Will Salter</div><div class="player-country">ENG</div></div><span class="player-rank">WR 151</span></div>
+      <div class="player-card"><span class="player-seed seed-group">9/16</span><div class="player-info"><div class="player-name">Joshua Phinera</div><div class="player-country">FRA</div></div><span class="player-rank">WR 152</span></div>
+      <div class="player-card"><span class="player-seed seed-group">9/16</span><div class="player-info"><div class="player-name">Joeri Hapers</div><div class="player-country">BEL</div></div><span class="player-rank">WR 161</span></div>
+      <div class="player-card"><span class="player-seed seed-group">9/16</span><div class="player-info"><div class="player-name">Jared Carter</div><div class="player-country">ENG</div></div><span class="player-rank">WR 168</span></div>
+      <!-- UNSEEDED -->
+      <div class="player-card"><span class="player-seed seed-none">—</span><div class="player-info"><div class="player-name">Ahmed Rashed</div><div class="player-country">EGY · U19</div></div><span class="player-rank">WR 173</span></div>
+      <div class="player-card"><span class="player-seed seed-none">—</span><div class="player-info"><div class="player-name">Yusuf Sheikh</div><div class="player-country">ENG</div></div><span class="player-rank">WR 178</span></div>
+      <div class="player-card"><span class="player-seed seed-none">—</span><div class="player-info"><div class="player-name">Matteo Carrouget</div><div class="player-country">FRA</div></div><span class="player-rank">WR 187</span></div>
+      <div class="player-card"><span class="player-seed seed-none">—</span><div class="player-info"><div class="player-name">Marek Panáček</div><div class="player-country">CZE</div></div><span class="player-rank">WR 189</span></div>
+      <div class="player-card"><span class="player-seed seed-none">—</span><div class="player-info"><div class="player-name">Elliott Morris Devred</div><div class="player-country">WAL</div></div><span class="player-rank">WR 200</span></div>
+      <!-- WILDCARDS -->
+      <div class="player-card wildcard-confirmed"><span class="player-seed seed-wc">WC</span><div class="player-info"><div class="player-name">Sergio García Pollán</div><div class="player-country" data-en="ESP · Local Wildcard" data-es="ESP · Invitado Local">ESP · Local Wildcard</div></div><span class="player-rank">WR 221</span></div>
+      <div class="player-card wildcard-tbd"><span class="player-seed seed-wc-tbd">WC</span><div class="player-info"><div class="player-name" data-en="Qualifier" data-es="Clasificatorio">Qualifier</div><div class="player-country" data-en="To be decided" data-es="A determinar">To be decided</div></div><span class="player-rank">TBD</span></div>
+      <div class="player-card wildcard-tbd"><span class="player-seed seed-wc-tbd">WC</span><div class="player-info"><div class="player-name" data-en="Qualifier" data-es="Clasificatorio">Qualifier</div><div class="player-country" data-en="To be decided" data-es="A determinar">To be decided</div></div><span class="player-rank">TBD</span></div>
     </div>
-    <p class="draw-note" data-en="Full draw released closer to the event. Follow @madridsquashopen for updates." data-es="El cuadro completo se publicará próximo al evento. Sigue @madridsquashopen para actualizaciones.">Full draw released closer to the event. Follow <a href="https://instagram.com/madridsquashopen" style="color:var(--gold)">@madridsquashopen</a> for updates.</p>
+    <div class="draw-legend">
+      <span><strong data-en="1–8" data-es="1–8">1–8</strong><span data-en="Top Seeds" data-es="Cabezas de Serie">Top Seeds</span></span>
+      <span><strong data-en="9/16" data-es="9/16">9/16</strong><span data-en="Seeded by Group" data-es="Cabezas Grupo 9/16">Seeded by Group</span></span>
+      <span><strong data-en="—" data-es="—">—</strong><span data-en="Unseeded" data-es="Sin Clasificación">Unseeded</span></span>
+      <span><strong style="color:var(--gold)">WC</strong><span data-en="Wildcard" data-es="Comodín">Wildcard</span></span>
+    </div>
+    <p class="draw-note" data-en="Main draw of 24 confirmed (cut-off date: 5 May 2026). The two final wildcard places will be decided by a qualifying event the weekend before the tournament. Bracket placements will be drawn closer to the event."
+       data-es="Cuadro principal de 24 jugadores confirmado (fecha de cierre: 5 de mayo de 2026). Las dos últimas plazas de comodín se decidirán mediante un torneo clasificatorio el fin de semana previo al evento. Las posiciones del cuadro se sortearán próximas al torneo.">Main draw of 24 confirmed (cut-off date: 5 May 2026). The two final wildcard places will be decided by a qualifying event the weekend before the tournament. Bracket placements will be drawn closer to the event.</p>
   </div>
 </section>
 
