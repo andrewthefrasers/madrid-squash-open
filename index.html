@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,300;0,400;0,600;0,700;1,400&family=Barlow+Condensed:wght@400;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.5.0/css/flag-icons.min.css"/>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
@@ -263,6 +264,13 @@
     .player-card.wildcard-tbd { border: 1px dashed rgba(123,160,187,.28); background: rgba(0,27,45,.5); padding: 17px; }
     .player-card.wildcard-tbd .player-name { color: var(--muted); font-style: italic; }
     .player-card.wildcard-tbd .player-rank { color: var(--muted); background: rgba(123,160,187,.08); }
+    .player-flag {
+      width: 28px; height: 21px; flex-shrink: 0;
+      border-radius: 2px;
+      box-shadow: 0 0 0 1px rgba(255,255,255,.1), 0 1px 4px rgba(0,0,0,.25);
+      background-size: cover; background-position: center;
+    }
+    .player-card.wildcard-tbd .player-flag { visibility: hidden; }
     .draw-note { margin-top: 22px; text-align: center; color: var(--muted); font-size: .85rem; }
     .draw-legend { display: flex; flex-wrap: wrap; gap: 18px 28px; justify-content: center; margin-top: 18px; font-family: "Barlow Condensed", sans-serif; font-size: .78rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
     .draw-legend span strong { color: var(--white); font-weight: 700; margin-right: 6px; }
@@ -730,33 +738,33 @@
     <h2 class="section-title" data-en="Players &amp; Draw" data-es="Jugadores y Cuadro">Players &amp; Draw</h2>
     <div id="draw-men" class="draw-grid">
       <!-- TOP 8 SEEDS -->
-      <div class="player-card"><span class="player-seed">1</span><div class="player-info"><div class="player-name">Henry Leung</div><div class="player-country">HKG</div></div><span class="player-rank">WR 54</span></div>
-      <div class="player-card"><span class="player-seed">2</span><div class="player-info"><div class="player-name">Iván Pérez</div><div class="player-country">ESP</div></div><span class="player-rank">WR 58</span></div>
-      <div class="player-card"><span class="player-seed">3</span><div class="player-info"><div class="player-name">Muhammad Asim Khan</div><div class="player-country">PAK</div></div><span class="player-rank">WR 69</span></div>
-      <div class="player-card"><span class="player-seed">4</span><div class="player-info"><div class="player-name">Mohamed Nasser</div><div class="player-country">EGY</div></div><span class="player-rank">WR 71</span></div>
-      <div class="player-card"><span class="player-seed">5</span><div class="player-info"><div class="player-name">Leandro Romiglio</div><div class="player-country">ARG</div></div><span class="player-rank">WR 73</span></div>
-      <div class="player-card"><span class="player-seed">6</span><div class="player-info"><div class="player-name">Yassin Elshafei</div><div class="player-country">EGY</div></div><span class="player-rank">WR 77</span></div>
-      <div class="player-card"><span class="player-seed">7</span><div class="player-info"><div class="player-name">Matthew Lai</div><div class="player-country">HKG</div></div><span class="player-rank">WR 83</span></div>
-      <div class="player-card"><span class="player-seed">8</span><div class="player-info"><div class="player-name">Macéo Levy</div><div class="player-country">FRA</div></div><span class="player-rank">WR 90</span></div>
+      <div class="player-card"><span class="player-seed">1</span><div class="player-info"><div class="player-name">Henry Leung</div><div class="player-country">HKG</div></div><span class="player-rank">WR 54</span><span class="fi fi-hk player-flag" aria-hidden="true"></span></div>
+      <div class="player-card"><span class="player-seed">2</span><div class="player-info"><div class="player-name">Iván Pérez</div><div class="player-country">ESP</div></div><span class="player-rank">WR 58</span><span class="fi fi-es player-flag" aria-hidden="true"></span></div>
+      <div class="player-card"><span class="player-seed">3</span><div class="player-info"><div class="player-name">Muhammad Asim Khan</div><div class="player-country">PAK</div></div><span class="player-rank">WR 69</span><span class="fi fi-pk player-flag" aria-hidden="true"></span></div>
+      <div class="player-card"><span class="player-seed">4</span><div class="player-info"><div class="player-name">Mohamed Nasser</div><div class="player-country">EGY</div></div><span class="player-rank">WR 71</span><span class="fi fi-eg player-flag" aria-hidden="true"></span></div>
+      <div class="player-card"><span class="player-seed">5</span><div class="player-info"><div class="player-name">Leandro Romiglio</div><div class="player-country">ARG</div></div><span class="player-rank">WR 73</span><span class="fi fi-ar player-flag" aria-hidden="true"></span></div>
+      <div class="player-card"><span class="player-seed">6</span><div class="player-info"><div class="player-name">Yassin Elshafei</div><div class="player-country">EGY</div></div><span class="player-rank">WR 77</span><span class="fi fi-eg player-flag" aria-hidden="true"></span></div>
+      <div class="player-card"><span class="player-seed">7</span><div class="player-info"><div class="player-name">Matthew Lai</div><div class="player-country">HKG</div></div><span class="player-rank">WR 83</span><span class="fi fi-hk player-flag" aria-hidden="true"></span></div>
+      <div class="player-card"><span class="player-seed">8</span><div class="player-info"><div class="player-name">Macéo Levy</div><div class="player-country">FRA</div></div><span class="player-rank">WR 90</span><span class="fi fi-fr player-flag" aria-hidden="true"></span></div>
       <!-- 9/16 SEEDED (drawn into bracket positions 9-16) -->
-      <div class="player-card"><span class="player-seed seed-group">9/16</span><div class="player-info"><div class="player-name">Brice Nicolas</div><div class="player-country">FRA</div></div><span class="player-rank">WR 95</span></div>
-      <div class="player-card"><span class="player-seed seed-group">9/16</span><div class="player-info"><div class="player-name">Salim Khan</div><div class="player-country">USA</div></div><span class="player-rank">WR 108</span></div>
-      <div class="player-card"><span class="player-seed seed-group">9/16</span><div class="player-info"><div class="player-name">Ibrahim Elkabbani</div><div class="player-country">EGY</div></div><span class="player-rank">WR 110</span></div>
-      <div class="player-card"><span class="player-seed seed-group">9/16</span><div class="player-info"><div class="player-name">Abdelrahman Nassar</div><div class="player-country">EGY</div></div><span class="player-rank">WR 123</span></div>
-      <div class="player-card"><span class="player-seed seed-group">9/16</span><div class="player-info"><div class="player-name">Will Salter</div><div class="player-country">ENG</div></div><span class="player-rank">WR 151</span></div>
-      <div class="player-card"><span class="player-seed seed-group">9/16</span><div class="player-info"><div class="player-name">Joshua Phinera</div><div class="player-country">FRA</div></div><span class="player-rank">WR 152</span></div>
-      <div class="player-card"><span class="player-seed seed-group">9/16</span><div class="player-info"><div class="player-name">Joeri Hapers</div><div class="player-country">BEL</div></div><span class="player-rank">WR 161</span></div>
-      <div class="player-card"><span class="player-seed seed-group">9/16</span><div class="player-info"><div class="player-name">Jared Carter</div><div class="player-country">ENG</div></div><span class="player-rank">WR 168</span></div>
+      <div class="player-card"><span class="player-seed seed-group">9/16</span><div class="player-info"><div class="player-name">Brice Nicolas</div><div class="player-country">FRA</div></div><span class="player-rank">WR 95</span><span class="fi fi-fr player-flag" aria-hidden="true"></span></div>
+      <div class="player-card"><span class="player-seed seed-group">9/16</span><div class="player-info"><div class="player-name">Salim Khan</div><div class="player-country">USA</div></div><span class="player-rank">WR 108</span><span class="fi fi-us player-flag" aria-hidden="true"></span></div>
+      <div class="player-card"><span class="player-seed seed-group">9/16</span><div class="player-info"><div class="player-name">Ibrahim Elkabbani</div><div class="player-country">EGY</div></div><span class="player-rank">WR 110</span><span class="fi fi-eg player-flag" aria-hidden="true"></span></div>
+      <div class="player-card"><span class="player-seed seed-group">9/16</span><div class="player-info"><div class="player-name">Abdelrahman Nassar</div><div class="player-country">EGY</div></div><span class="player-rank">WR 123</span><span class="fi fi-eg player-flag" aria-hidden="true"></span></div>
+      <div class="player-card"><span class="player-seed seed-group">9/16</span><div class="player-info"><div class="player-name">Will Salter</div><div class="player-country">ENG</div></div><span class="player-rank">WR 151</span><span class="fi fi-gb-eng player-flag" aria-hidden="true"></span></div>
+      <div class="player-card"><span class="player-seed seed-group">9/16</span><div class="player-info"><div class="player-name">Joshua Phinera</div><div class="player-country">FRA</div></div><span class="player-rank">WR 152</span><span class="fi fi-fr player-flag" aria-hidden="true"></span></div>
+      <div class="player-card"><span class="player-seed seed-group">9/16</span><div class="player-info"><div class="player-name">Joeri Hapers</div><div class="player-country">BEL</div></div><span class="player-rank">WR 161</span><span class="fi fi-be player-flag" aria-hidden="true"></span></div>
+      <div class="player-card"><span class="player-seed seed-group">9/16</span><div class="player-info"><div class="player-name">Jared Carter</div><div class="player-country">ENG</div></div><span class="player-rank">WR 168</span><span class="fi fi-gb-eng player-flag" aria-hidden="true"></span></div>
       <!-- UNSEEDED -->
-      <div class="player-card"><span class="player-seed seed-none">—</span><div class="player-info"><div class="player-name">Ahmed Rashed</div><div class="player-country">EGY · U19</div></div><span class="player-rank">WR 173</span></div>
-      <div class="player-card"><span class="player-seed seed-none">—</span><div class="player-info"><div class="player-name">Yusuf Sheikh</div><div class="player-country">ENG</div></div><span class="player-rank">WR 178</span></div>
-      <div class="player-card"><span class="player-seed seed-none">—</span><div class="player-info"><div class="player-name">Matteo Carrouget</div><div class="player-country">FRA</div></div><span class="player-rank">WR 187</span></div>
-      <div class="player-card"><span class="player-seed seed-none">—</span><div class="player-info"><div class="player-name">Marek Panáček</div><div class="player-country">CZE</div></div><span class="player-rank">WR 189</span></div>
-      <div class="player-card"><span class="player-seed seed-none">—</span><div class="player-info"><div class="player-name">Elliott Morris Devred</div><div class="player-country">WAL</div></div><span class="player-rank">WR 200</span></div>
+      <div class="player-card"><span class="player-seed seed-none">—</span><div class="player-info"><div class="player-name">Ahmed Rashed</div><div class="player-country">EGY · U19</div></div><span class="player-rank">WR 173</span><span class="fi fi-eg player-flag" aria-hidden="true"></span></div>
+      <div class="player-card"><span class="player-seed seed-none">—</span><div class="player-info"><div class="player-name">Yusuf Sheikh</div><div class="player-country">ENG</div></div><span class="player-rank">WR 178</span><span class="fi fi-gb-eng player-flag" aria-hidden="true"></span></div>
+      <div class="player-card"><span class="player-seed seed-none">—</span><div class="player-info"><div class="player-name">Matteo Carrouget</div><div class="player-country">FRA</div></div><span class="player-rank">WR 187</span><span class="fi fi-fr player-flag" aria-hidden="true"></span></div>
+      <div class="player-card"><span class="player-seed seed-none">—</span><div class="player-info"><div class="player-name">Marek Panáček</div><div class="player-country">CZE</div></div><span class="player-rank">WR 189</span><span class="fi fi-cz player-flag" aria-hidden="true"></span></div>
+      <div class="player-card"><span class="player-seed seed-none">—</span><div class="player-info"><div class="player-name">Elliott Morris Devred</div><div class="player-country">WAL</div></div><span class="player-rank">WR 200</span><span class="fi fi-gb-wls player-flag" aria-hidden="true"></span></div>
       <!-- WILDCARDS -->
-      <div class="player-card wildcard-confirmed"><span class="player-seed seed-wc">WC</span><div class="player-info"><div class="player-name">Sergio García Pollán</div><div class="player-country" data-en="ESP · Local Wildcard" data-es="ESP · Invitado Local">ESP · Local Wildcard</div></div><span class="player-rank">WR 221</span></div>
-      <div class="player-card wildcard-tbd"><span class="player-seed seed-wc-tbd">WC</span><div class="player-info"><div class="player-name" data-en="Qualifier" data-es="Clasificatorio">Qualifier</div><div class="player-country" data-en="To be decided" data-es="A determinar">To be decided</div></div><span class="player-rank">TBD</span></div>
-      <div class="player-card wildcard-tbd"><span class="player-seed seed-wc-tbd">WC</span><div class="player-info"><div class="player-name" data-en="Qualifier" data-es="Clasificatorio">Qualifier</div><div class="player-country" data-en="To be decided" data-es="A determinar">To be decided</div></div><span class="player-rank">TBD</span></div>
+      <div class="player-card wildcard-confirmed"><span class="player-seed seed-wc">WC</span><div class="player-info"><div class="player-name">Sergio García Pollán</div><div class="player-country" data-en="ESP · Local Wildcard" data-es="ESP · Invitado Local">ESP · Local Wildcard</div></div><span class="player-rank">WR 221</span><span class="fi fi-es player-flag" aria-hidden="true"></span></div>
+      <div class="player-card wildcard-tbd"><span class="player-seed seed-wc-tbd">WC</span><div class="player-info"><div class="player-name" data-en="Qualifier" data-es="Clasificatorio">Qualifier</div><div class="player-country" data-en="To be decided" data-es="A determinar">To be decided</div></div><span class="player-rank">TBD</span><span class="fi fi-un player-flag" aria-hidden="true"></span></div>
+      <div class="player-card wildcard-tbd"><span class="player-seed seed-wc-tbd">WC</span><div class="player-info"><div class="player-name" data-en="Qualifier" data-es="Clasificatorio">Qualifier</div><div class="player-country" data-en="To be decided" data-es="A determinar">To be decided</div></div><span class="player-rank">TBD</span><span class="fi fi-un player-flag" aria-hidden="true"></span></div>
     </div>
     <div class="draw-legend">
       <span><strong data-en="1–8" data-es="1–8">1–8</strong><span data-en="Top Seeds" data-es="Cabezas de Serie">Top Seeds</span></span>
