@@ -308,8 +308,11 @@
     .player-flag-mini { width: 20px; height: 14px; border-radius: 1px; box-shadow: 0 0 0 1px rgba(255,255,255,.08); background-size: cover; background-position: center; flex-shrink: 0; }
     .player-flag-mini.empty { visibility: hidden; }
     .player-name-mini { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.2; }
-    .match-score-mini { font-size: .82rem; color: var(--muted); font-variant-numeric: tabular-nums; font-weight: 700; margin-left: 4px; flex-shrink: 0; }
-    .match-player.winner .match-score-mini { color: var(--gold); }
+    /* Score column: visible pill on the right edge of each player row. Empty state shows a dash. */
+    .match-score-mini { font-size: .95rem; color: var(--muted); font-variant-numeric: tabular-nums; font-weight: 800; margin-left: 8px; flex-shrink: 0; min-width: 24px; text-align: center; padding: 2px 6px; background: rgba(0,0,0,.25); border-radius: 3px; line-height: 1.2; }
+    .match-player.winner .match-score-mini { color: var(--gold); background: rgba(240,195,48,.12); }
+    /* Optional game-by-game scores strip (e.g. "11-9, 11-5, 8-11, 11-7"). Add below the two player rows when a match completes. */
+    .match-games { font-family: "Barlow Condensed", sans-serif; font-size: .68rem; letter-spacing: .04em; color: var(--muted); padding: 5px 10px; background: rgba(0,0,0,.18); border-top: 1px solid rgba(255,255,255,.05); text-align: center; font-variant-numeric: tabular-nums; }
     /* Right-going connector line: rounds 1-4 */
     .bracket-round:not([data-round="f"]) .match-slot::after { content: ''; position: absolute; top: 50%; left: 100%; width: 18px; height: 2px; background: var(--line); transform: translateY(-1px); pointer-events: none; }
     /* T-shape on left (vertical line + horizontal stub): rounds 2-5 — extended ~3px past 25%/75% to bridge match-slot gap */
@@ -1374,19 +1377,24 @@ if (hamburger && mobileNav) {
   if (!bracket || !tabs.length) return;
   let suppressScrollSync = 0;
 
-  // Click handler: smooth-scroll the bracket so the target round is visible at the left
+  // Click handler: smooth-scroll the bracket so the target round is visible at the left.
+  // Uses getBoundingClientRect (relative measurement) because .bracket has no positioning
+  // context, so round.offsetLeft is computed against a different ancestor and gives wrong values.
   tabs.forEach(tab => {
     tab.addEventListener("click", (e) => {
       e.preventDefault();
       const targetId = tab.getAttribute("data-target");
       const round    = document.getElementById(targetId);
       if (!round) return;
-      // 4px left padding so the column isn't flush against the edge
-      bracket.scrollTo({ left: round.offsetLeft - 4, behavior: "smooth" });
+      suppressScrollSync = Date.now() + 1000;
       tabs.forEach(t => t.classList.remove("active"));
       tab.classList.add("active");
-      // Ignore scroll-sync events while the smooth-scroll animation is running
-      suppressScrollSync = Date.now() + 700;
+      // Relative offset of the round within the scroll container
+      const bracketRect = bracket.getBoundingClientRect();
+      const roundRect   = round.getBoundingClientRect();
+      const relativeLeft = bracket.scrollLeft + (roundRect.left - bracketRect.left);
+      const targetLeft = Math.max(0, relativeLeft - 4);
+      bracket.scrollTo({ left: targetLeft, behavior: "smooth" });
     });
   });
 
@@ -1397,11 +1405,13 @@ if (hamburger && mobileNav) {
     clearTimeout(scrollTimer);
     scrollTimer = setTimeout(() => {
       const rounds = bracket.querySelectorAll(".bracket-round");
-      const scrollLeft = bracket.scrollLeft + bracket.clientWidth * 0.25; // 25% from left
+      const bracketRect = bracket.getBoundingClientRect();
+      const targetScroll = bracket.scrollLeft + bracket.clientWidth * 0.25; // 25% from left
       let closest = rounds[0];
       let closestDist = Infinity;
       rounds.forEach(r => {
-        const dist = Math.abs(r.offsetLeft - scrollLeft);
+        const relLeft = bracket.scrollLeft + (r.getBoundingClientRect().left - bracketRect.left);
+        const dist = Math.abs(relLeft - targetScroll);
         if (dist < closestDist) { closestDist = dist; closest = r; }
       });
       tabs.forEach(t => t.classList.toggle("active", t.getAttribute("data-target") === closest.id));
