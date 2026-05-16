@@ -275,6 +275,49 @@
     .draw-legend { display: flex; flex-wrap: wrap; gap: 18px 28px; justify-content: center; margin-top: 18px; font-family: "Barlow Condensed", sans-serif; font-size: .78rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
     .draw-legend span strong { color: var(--white); font-weight: 700; margin-right: 6px; }
 
+    /* ======= BRACKET ======= */
+    .bracket-wrap { margin-top: 56px; padding-top: 36px; border-top: 1px solid rgba(255,255,255,.06); }
+    .bracket-header { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; margin-bottom: 18px; }
+    .bracket-title { font-family: "Barlow Condensed", sans-serif; font-weight: 800; font-size: 1rem; letter-spacing: .18em; text-transform: uppercase; color: var(--white); }
+    .bracket-tabs { display: flex; gap: 4px; flex-wrap: wrap; }
+    .bracket-tab { font-family: "Barlow Condensed", sans-serif; font-weight: 700; font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); background: var(--navy2); padding: 6px 12px; border-radius: 3px; border: 1px solid transparent; transition: color .2s, background .2s, border-color .2s; cursor: pointer; }
+    .bracket-tab:hover { color: var(--white); border-color: rgba(0,168,232,.3); }
+    .bracket-tab.active { background: var(--accent); color: var(--navy); border-color: var(--accent); }
+    .bracket-scroll-hint { display: none; text-align: center; color: var(--muted); font-family: "Barlow Condensed", sans-serif; font-size: .78rem; letter-spacing: .1em; text-transform: uppercase; padding: 6px 0 12px; }
+    .bracket-scroll-hint::after { content: " →"; color: var(--accent); }
+    .bracket { --line: rgba(0,168,232,.3); display: flex; gap: 36px; overflow-x: auto; overflow-y: hidden; padding: 8px 4px 18px; scroll-behavior: smooth; -webkit-overflow-scrolling: touch; }
+    .bracket::-webkit-scrollbar { height: 8px; }
+    .bracket::-webkit-scrollbar-track { background: rgba(255,255,255,.04); border-radius: 4px; }
+    .bracket::-webkit-scrollbar-thumb { background: rgba(0,168,232,.4); border-radius: 4px; }
+    .bracket-round { display: flex; flex-direction: column; flex-shrink: 0; width: 220px; }
+    .bracket-round-header { text-align: center; font-family: "Barlow Condensed", sans-serif; font-weight: 800; font-size: .82rem; letter-spacing: .18em; text-transform: uppercase; color: var(--accent); padding: 10px 0; margin-bottom: 12px; background: rgba(0,168,232,.08); border-radius: 3px; }
+    .bracket-round-body { flex: 1; display: flex; flex-direction: column; gap: 6px; }
+    .match-slot { flex: 1; display: flex; align-items: center; position: relative; }
+    .bracket-round[data-round="l16"] .match-slot { flex: 2; }
+    .bracket-round[data-round="qf"] .match-slot { flex: 4; }
+    .bracket-round[data-round="sf"] .match-slot { flex: 8; }
+    .bracket-round[data-round="f"] .match-slot { flex: 16; }
+    .match { width: 100%; background: var(--navy2); border-radius: 3px; border: 1px solid rgba(255,255,255,.05); overflow: hidden; }
+    .match-player { display: flex; align-items: center; gap: 8px; padding: 8px 10px; font-family: "Barlow Condensed", sans-serif; font-weight: 700; font-size: .82rem; color: var(--text); border-bottom: 1px solid rgba(255,255,255,.05); }
+    .match-player:last-child { border-bottom: none; }
+    .match-player.bye { color: var(--muted); font-style: italic; background: rgba(0,0,0,.12); }
+    .match-player.tbd { color: var(--muted); }
+    .match-player.tbd .player-name-mini { font-style: italic; }
+    .match-player.winner { color: var(--white); }
+    .player-seed-mini { font-size: .65rem; color: var(--accent); font-weight: 800; letter-spacing: .03em; min-width: 14px; text-align: center; flex-shrink: 0; }
+    .player-flag-mini { width: 20px; height: 14px; border-radius: 1px; box-shadow: 0 0 0 1px rgba(255,255,255,.08); background-size: cover; background-position: center; flex-shrink: 0; }
+    .player-flag-mini.empty { visibility: hidden; }
+    .player-name-mini { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.2; }
+    .match-score-mini { font-size: .82rem; color: var(--muted); font-variant-numeric: tabular-nums; font-weight: 700; margin-left: 4px; flex-shrink: 0; }
+    .match-player.winner .match-score-mini { color: var(--gold); }
+    /* Right-going connector line: rounds 1-4 */
+    .bracket-round:not([data-round="f"]) .match-slot::after { content: ''; position: absolute; top: 50%; left: 100%; width: 18px; height: 2px; background: var(--line); transform: translateY(-1px); pointer-events: none; }
+    /* T-shape on left (vertical line + horizontal stub): rounds 2-5 — extended ~3px past 25%/75% to bridge match-slot gap */
+    .bracket-round:not([data-round="r1"]) .match-slot::before { content: ''; position: absolute; top: calc(25% - 3px); bottom: calc(25% - 3px); right: 100%; width: 18px; background: linear-gradient(to right, var(--line) 2px, transparent 2px) 0 0 / 100% 100% no-repeat, linear-gradient(var(--line), var(--line)) 0 50% / 100% 2px no-repeat; pointer-events: none; }
+    /* Match meta header (date · time · court) */
+    .match-meta { display: block; font-family: "Barlow Condensed", sans-serif; font-weight: 700; font-size: .65rem; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); padding: 4px 10px 3px; background: rgba(0,168,232,.06); border-bottom: 1px solid rgba(255,255,255,.06); text-align: center; line-height: 1.2; }
+    .match-meta.scheduled { color: var(--accent); }
+
     /* ======= NEWS ======= */
     #news { background: var(--navy2); }
     .news-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; }
@@ -407,6 +450,9 @@
       .cd-item { flex: 1; padding: 12px 8px; }
       .scroll-hint { display: none; }
       .hero-content { padding-bottom: 24px; }
+      .bracket-scroll-hint { display: block; }
+      .bracket-round { width: 180px; }
+      .bracket .match-player { font-size: .78rem; padding: 7px 8px; }
     }
     @media (max-width:480px) {
       h1.hero-title { font-size: 3.3rem; }
@@ -414,6 +460,10 @@
       .hero-meta-sep { display: none; }
       .draw-grid { grid-template-columns: 1fr; }
       .nav-logo img { height: 28px; }
+      .bracket-round { width: 158px; }
+      .bracket .player-flag-mini { width: 16px; height: 11px; }
+      .bracket .match-player { font-size: .72rem; padding: 6px 7px; gap: 6px; }
+      .bracket .player-seed-mini { font-size: .6rem; min-width: 12px; }
     }
   </style>
 </head>
@@ -774,6 +824,235 @@
     </div>
     <p class="draw-note" data-en="Main draw of 24 confirmed (cut-off date: 5 May 2026). The two final wildcard places will be decided by a qualifying event the weekend before the tournament. Bracket placements will be drawn closer to the event."
        data-es="Cuadro principal de 24 jugadores confirmado (fecha de cierre: 5 de mayo de 2026). Las dos últimas plazas de comodín se decidirán mediante un torneo clasificatorio el fin de semana previo al evento. Las posiciones del cuadro se sortearán próximas al torneo.">Main draw of 24 confirmed (cut-off date: 5 May 2026). The two final wildcard places will be decided by a qualifying event the weekend before the tournament. Bracket placements will be drawn closer to the event.</p>
+
+    <div class="bracket-wrap">
+      <div class="bracket-header">
+        <span class="bracket-title" data-en="Tournament Bracket" data-es="Cuadro del Torneo">Tournament Bracket</span>
+        <div class="bracket-tabs">
+          <button class="bracket-tab active" data-target="round-r1" data-en="R1" data-es="R1">R1</button>
+          <button class="bracket-tab" data-target="round-l16" data-en="R16" data-es="R16">R16</button>
+          <button class="bracket-tab" data-target="round-qf" data-en="QF" data-es="CF">QF</button>
+          <button class="bracket-tab" data-target="round-sf" data-en="SF" data-es="SF">SF</button>
+          <button class="bracket-tab" data-target="round-f" data-en="Final" data-es="Final">Final</button>
+        </div>
+      </div>
+      <p class="bracket-scroll-hint" data-en="Scroll horizontally to view all rounds" data-es="Desliza horizontalmente para ver todas las rondas">Scroll horizontally to view all rounds</p>
+      <div class="bracket" id="bracket">
+        <div class="bracket-round" id="round-r1" data-round="r1">
+          <div class="bracket-round-header" data-en="Round 1" data-es="Ronda 1">Round 1</div>
+          <div class="bracket-round-body">
+      <!-- R1.1 -->
+      <div class="match-slot"><div class="match" data-match="r1-m1">
+        <div class="match-meta" data-en="TBD" data-es="TBD">TBD</div>
+        <div class="match-player"><span class="player-seed-mini">1</span><span class="fi fi-hk player-flag-mini"></span><span class="player-name-mini">H. Leung</span><span class="match-score-mini">-</span></div>
+        <div class="match-player bye"><span class="player-seed-mini"></span><span class="player-flag-mini empty"></span><span class="player-name-mini" data-en="BYE" data-es="BYE">BYE</span><span class="match-score-mini">-</span></div>
+      </div></div>
+      <!-- R1.2 -->
+      <div class="match-slot"><div class="match" data-match="r1-m2">
+        <div class="match-meta" data-en="TBD" data-es="TBD">TBD</div>
+        <div class="match-player tbd"><span class="player-seed-mini">WC</span><span class="fi fi-un player-flag-mini"></span><span class="player-name-mini" data-en="Qualifier" data-es="Clasificatorio">Qualifier</span><span class="match-score-mini">-</span></div>
+        <div class="match-player"><span class="player-seed-mini"></span><span class="fi fi-eg player-flag-mini"></span><span class="player-name-mini">A. Nassar</span><span class="match-score-mini">-</span></div>
+      </div></div>
+      <!-- R1.3 -->
+      <div class="match-slot"><div class="match" data-match="r1-m3">
+        <div class="match-meta" data-en="TBD" data-es="TBD">TBD</div>
+        <div class="match-player"><span class="player-seed-mini"></span><span class="fi fi-fr player-flag-mini"></span><span class="player-name-mini">B. Nicolas</span><span class="match-score-mini">-</span></div>
+        <div class="match-player"><span class="player-seed-mini"></span><span class="fi fi-cz player-flag-mini"></span><span class="player-name-mini">M. Panáček</span><span class="match-score-mini">-</span></div>
+      </div></div>
+      <!-- R1.4 -->
+      <div class="match-slot"><div class="match" data-match="r1-m4">
+        <div class="match-meta" data-en="TBD" data-es="TBD">TBD</div>
+        <div class="match-player bye"><span class="player-seed-mini"></span><span class="player-flag-mini empty"></span><span class="player-name-mini" data-en="BYE" data-es="BYE">BYE</span><span class="match-score-mini">-</span></div>
+        <div class="match-player"><span class="player-seed-mini">6</span><span class="fi fi-eg player-flag-mini"></span><span class="player-name-mini">Y. Elshafei</span><span class="match-score-mini">-</span></div>
+      </div></div>
+      <!-- R1.5 -->
+      <div class="match-slot"><div class="match" data-match="r1-m5">
+        <div class="match-meta" data-en="TBD" data-es="TBD">TBD</div>
+        <div class="match-player"><span class="player-seed-mini">7</span><span class="fi fi-hk player-flag-mini"></span><span class="player-name-mini">M. Lai</span><span class="match-score-mini">-</span></div>
+        <div class="match-player bye"><span class="player-seed-mini"></span><span class="player-flag-mini empty"></span><span class="player-name-mini" data-en="BYE" data-es="BYE">BYE</span><span class="match-score-mini">-</span></div>
+      </div></div>
+      <!-- R1.6 -->
+      <div class="match-slot"><div class="match" data-match="r1-m6">
+        <div class="match-meta" data-en="TBD" data-es="TBD">TBD</div>
+        <div class="match-player"><span class="player-seed-mini"></span><span class="fi fi-fr player-flag-mini"></span><span class="player-name-mini">M. Carrouget</span><span class="match-score-mini">-</span></div>
+        <div class="match-player"><span class="player-seed-mini"></span><span class="fi fi-us player-flag-mini"></span><span class="player-name-mini">S. Khan</span><span class="match-score-mini">-</span></div>
+      </div></div>
+      <!-- R1.7 -->
+      <div class="match-slot"><div class="match" data-match="r1-m7">
+        <div class="match-meta" data-en="TBD" data-es="TBD">TBD</div>
+        <div class="match-player"><span class="player-seed-mini"></span><span class="fi fi-gb-eng player-flag-mini"></span><span class="player-name-mini">W. Salter</span><span class="match-score-mini">-</span></div>
+        <div class="match-player"><span class="player-seed-mini"></span><span class="fi fi-gb-wls player-flag-mini"></span><span class="player-name-mini">E. Morris Devred</span><span class="match-score-mini">-</span></div>
+      </div></div>
+      <!-- R1.8 -->
+      <div class="match-slot"><div class="match" data-match="r1-m8">
+        <div class="match-meta" data-en="TBD" data-es="TBD">TBD</div>
+        <div class="match-player bye"><span class="player-seed-mini"></span><span class="player-flag-mini empty"></span><span class="player-name-mini" data-en="BYE" data-es="BYE">BYE</span><span class="match-score-mini">-</span></div>
+        <div class="match-player"><span class="player-seed-mini">3</span><span class="fi fi-pk player-flag-mini"></span><span class="player-name-mini">M. Asim Khan</span><span class="match-score-mini">-</span></div>
+      </div></div>
+      <!-- R1.9 -->
+      <div class="match-slot"><div class="match" data-match="r1-m9">
+        <div class="match-meta" data-en="TBD" data-es="TBD">TBD</div>
+        <div class="match-player"><span class="player-seed-mini">4</span><span class="fi fi-eg player-flag-mini"></span><span class="player-name-mini">M. Nasser</span><span class="match-score-mini">-</span></div>
+        <div class="match-player bye"><span class="player-seed-mini"></span><span class="player-flag-mini empty"></span><span class="player-name-mini" data-en="BYE" data-es="BYE">BYE</span><span class="match-score-mini">-</span></div>
+      </div></div>
+      <!-- R1.10 -->
+      <div class="match-slot"><div class="match" data-match="r1-m10">
+        <div class="match-meta" data-en="TBD" data-es="TBD">TBD</div>
+        <div class="match-player tbd"><span class="player-seed-mini">WC</span><span class="fi fi-un player-flag-mini"></span><span class="player-name-mini" data-en="Qualifier" data-es="Clasificatorio">Qualifier</span><span class="match-score-mini">-</span></div>
+        <div class="match-player"><span class="player-seed-mini"></span><span class="fi fi-fr player-flag-mini"></span><span class="player-name-mini">J. Phinera</span><span class="match-score-mini">-</span></div>
+      </div></div>
+      <!-- R1.11 -->
+      <div class="match-slot"><div class="match" data-match="r1-m11">
+        <div class="match-meta" data-en="TBD" data-es="TBD">TBD</div>
+        <div class="match-player"><span class="player-seed-mini"></span><span class="fi fi-eg player-flag-mini"></span><span class="player-name-mini">I. Elkabbani</span><span class="match-score-mini">-</span></div>
+        <div class="match-player"><span class="player-seed-mini"></span><span class="fi fi-gb-eng player-flag-mini"></span><span class="player-name-mini">Y. Sheikh</span><span class="match-score-mini">-</span></div>
+      </div></div>
+      <!-- R1.12 -->
+      <div class="match-slot"><div class="match" data-match="r1-m12">
+        <div class="match-meta" data-en="TBD" data-es="TBD">TBD</div>
+        <div class="match-player bye"><span class="player-seed-mini"></span><span class="player-flag-mini empty"></span><span class="player-name-mini" data-en="BYE" data-es="BYE">BYE</span><span class="match-score-mini">-</span></div>
+        <div class="match-player"><span class="player-seed-mini">5</span><span class="fi fi-ar player-flag-mini"></span><span class="player-name-mini">L. Romiglio</span><span class="match-score-mini">-</span></div>
+      </div></div>
+      <!-- R1.13 -->
+      <div class="match-slot"><div class="match" data-match="r1-m13">
+        <div class="match-meta" data-en="TBD" data-es="TBD">TBD</div>
+        <div class="match-player"><span class="player-seed-mini">8</span><span class="fi fi-fr player-flag-mini"></span><span class="player-name-mini">M. Levy</span><span class="match-score-mini">-</span></div>
+        <div class="match-player bye"><span class="player-seed-mini"></span><span class="player-flag-mini empty"></span><span class="player-name-mini" data-en="BYE" data-es="BYE">BYE</span><span class="match-score-mini">-</span></div>
+      </div></div>
+      <!-- R1.14 -->
+      <div class="match-slot"><div class="match" data-match="r1-m14">
+        <div class="match-meta" data-en="TBD" data-es="TBD">TBD</div>
+        <div class="match-player"><span class="player-seed-mini"></span><span class="fi fi-eg player-flag-mini"></span><span class="player-name-mini">A. Rashed</span><span class="match-score-mini">-</span></div>
+        <div class="match-player"><span class="player-seed-mini"></span><span class="fi fi-gb-eng player-flag-mini"></span><span class="player-name-mini">J. Carter</span><span class="match-score-mini">-</span></div>
+      </div></div>
+      <!-- R1.15 -->
+      <div class="match-slot"><div class="match" data-match="r1-m15">
+        <div class="match-meta" data-en="TBD" data-es="TBD">TBD</div>
+        <div class="match-player"><span class="player-seed-mini"></span><span class="fi fi-be player-flag-mini"></span><span class="player-name-mini">J. Hapers</span><span class="match-score-mini">-</span></div>
+        <div class="match-player"><span class="player-seed-mini"></span><span class="fi fi-es player-flag-mini"></span><span class="player-name-mini">S. García Pollán</span><span class="match-score-mini">-</span></div>
+      </div></div>
+      <!-- R1.16 -->
+      <div class="match-slot"><div class="match" data-match="r1-m16">
+        <div class="match-meta" data-en="TBD" data-es="TBD">TBD</div>
+        <div class="match-player bye"><span class="player-seed-mini"></span><span class="player-flag-mini empty"></span><span class="player-name-mini" data-en="BYE" data-es="BYE">BYE</span><span class="match-score-mini">-</span></div>
+        <div class="match-player"><span class="player-seed-mini">2</span><span class="fi fi-es player-flag-mini"></span><span class="player-name-mini">I. Pérez</span><span class="match-score-mini">-</span></div>
+      </div></div>
+          </div>
+        </div>
+        <div class="bracket-round" id="round-l16" data-round="l16">
+          <div class="bracket-round-header" data-en="Round of 16" data-es="Octavos de Final">Round of 16</div>
+          <div class="bracket-round-body">
+      <!-- L16.1 -->
+      <div class="match-slot"><div class="match" data-match="r16-m1">
+        <div class="match-meta" data-en="TBD" data-es="TBD">TBD</div>
+        <div class="match-player"><span class="player-seed-mini">1</span><span class="fi fi-hk player-flag-mini"></span><span class="player-name-mini">H. Leung</span><span class="match-score-mini">-</span></div>
+        <div class="match-player tbd"><span class="player-seed-mini"></span><span class="player-flag-mini empty"></span><span class="player-name-mini" data-en="TBD" data-es="TBD">TBD</span><span class="match-score-mini">-</span></div>
+      </div></div>
+      <!-- L16.2 -->
+      <div class="match-slot"><div class="match" data-match="r16-m2">
+        <div class="match-meta" data-en="TBD" data-es="TBD">TBD</div>
+        <div class="match-player tbd"><span class="player-seed-mini"></span><span class="player-flag-mini empty"></span><span class="player-name-mini" data-en="TBD" data-es="TBD">TBD</span><span class="match-score-mini">-</span></div>
+        <div class="match-player"><span class="player-seed-mini">6</span><span class="fi fi-eg player-flag-mini"></span><span class="player-name-mini">Y. Elshafei</span><span class="match-score-mini">-</span></div>
+      </div></div>
+      <!-- L16.3 -->
+      <div class="match-slot"><div class="match" data-match="r16-m3">
+        <div class="match-meta" data-en="TBD" data-es="TBD">TBD</div>
+        <div class="match-player"><span class="player-seed-mini">7</span><span class="fi fi-hk player-flag-mini"></span><span class="player-name-mini">M. Lai</span><span class="match-score-mini">-</span></div>
+        <div class="match-player tbd"><span class="player-seed-mini"></span><span class="player-flag-mini empty"></span><span class="player-name-mini" data-en="TBD" data-es="TBD">TBD</span><span class="match-score-mini">-</span></div>
+      </div></div>
+      <!-- L16.4 -->
+      <div class="match-slot"><div class="match" data-match="r16-m4">
+        <div class="match-meta" data-en="TBD" data-es="TBD">TBD</div>
+        <div class="match-player tbd"><span class="player-seed-mini"></span><span class="player-flag-mini empty"></span><span class="player-name-mini" data-en="TBD" data-es="TBD">TBD</span><span class="match-score-mini">-</span></div>
+        <div class="match-player"><span class="player-seed-mini">3</span><span class="fi fi-pk player-flag-mini"></span><span class="player-name-mini">M. Asim Khan</span><span class="match-score-mini">-</span></div>
+      </div></div>
+      <!-- L16.5 -->
+      <div class="match-slot"><div class="match" data-match="r16-m5">
+        <div class="match-meta" data-en="TBD" data-es="TBD">TBD</div>
+        <div class="match-player"><span class="player-seed-mini">4</span><span class="fi fi-eg player-flag-mini"></span><span class="player-name-mini">M. Nasser</span><span class="match-score-mini">-</span></div>
+        <div class="match-player tbd"><span class="player-seed-mini"></span><span class="player-flag-mini empty"></span><span class="player-name-mini" data-en="TBD" data-es="TBD">TBD</span><span class="match-score-mini">-</span></div>
+      </div></div>
+      <!-- L16.6 -->
+      <div class="match-slot"><div class="match" data-match="r16-m6">
+        <div class="match-meta" data-en="TBD" data-es="TBD">TBD</div>
+        <div class="match-player tbd"><span class="player-seed-mini"></span><span class="player-flag-mini empty"></span><span class="player-name-mini" data-en="TBD" data-es="TBD">TBD</span><span class="match-score-mini">-</span></div>
+        <div class="match-player"><span class="player-seed-mini">5</span><span class="fi fi-ar player-flag-mini"></span><span class="player-name-mini">L. Romiglio</span><span class="match-score-mini">-</span></div>
+      </div></div>
+      <!-- L16.7 -->
+      <div class="match-slot"><div class="match" data-match="r16-m7">
+        <div class="match-meta" data-en="TBD" data-es="TBD">TBD</div>
+        <div class="match-player"><span class="player-seed-mini">8</span><span class="fi fi-fr player-flag-mini"></span><span class="player-name-mini">M. Levy</span><span class="match-score-mini">-</span></div>
+        <div class="match-player tbd"><span class="player-seed-mini"></span><span class="player-flag-mini empty"></span><span class="player-name-mini" data-en="TBD" data-es="TBD">TBD</span><span class="match-score-mini">-</span></div>
+      </div></div>
+      <!-- L16.8 -->
+      <div class="match-slot"><div class="match" data-match="r16-m8">
+        <div class="match-meta" data-en="TBD" data-es="TBD">TBD</div>
+        <div class="match-player tbd"><span class="player-seed-mini"></span><span class="player-flag-mini empty"></span><span class="player-name-mini" data-en="TBD" data-es="TBD">TBD</span><span class="match-score-mini">-</span></div>
+        <div class="match-player"><span class="player-seed-mini">2</span><span class="fi fi-es player-flag-mini"></span><span class="player-name-mini">I. Pérez</span><span class="match-score-mini">-</span></div>
+      </div></div>
+          </div>
+        </div>
+        <div class="bracket-round" id="round-qf" data-round="qf">
+          <div class="bracket-round-header" data-en="Quarter-Finals" data-es="Cuartos">Quarter-Finals</div>
+          <div class="bracket-round-body">
+      <!-- QF.1 -->
+      <div class="match-slot"><div class="match" data-match="qf-m1">
+        <div class="match-meta" data-en="TBD" data-es="TBD">TBD</div>
+        <div class="match-player tbd"><span class="player-seed-mini"></span><span class="player-flag-mini empty"></span><span class="player-name-mini" data-en="TBD" data-es="TBD">TBD</span><span class="match-score-mini">-</span></div>
+        <div class="match-player tbd"><span class="player-seed-mini"></span><span class="player-flag-mini empty"></span><span class="player-name-mini" data-en="TBD" data-es="TBD">TBD</span><span class="match-score-mini">-</span></div>
+      </div></div>
+      <!-- QF.2 -->
+      <div class="match-slot"><div class="match" data-match="qf-m2">
+        <div class="match-meta" data-en="TBD" data-es="TBD">TBD</div>
+        <div class="match-player tbd"><span class="player-seed-mini"></span><span class="player-flag-mini empty"></span><span class="player-name-mini" data-en="TBD" data-es="TBD">TBD</span><span class="match-score-mini">-</span></div>
+        <div class="match-player tbd"><span class="player-seed-mini"></span><span class="player-flag-mini empty"></span><span class="player-name-mini" data-en="TBD" data-es="TBD">TBD</span><span class="match-score-mini">-</span></div>
+      </div></div>
+      <!-- QF.3 -->
+      <div class="match-slot"><div class="match" data-match="qf-m3">
+        <div class="match-meta" data-en="TBD" data-es="TBD">TBD</div>
+        <div class="match-player tbd"><span class="player-seed-mini"></span><span class="player-flag-mini empty"></span><span class="player-name-mini" data-en="TBD" data-es="TBD">TBD</span><span class="match-score-mini">-</span></div>
+        <div class="match-player tbd"><span class="player-seed-mini"></span><span class="player-flag-mini empty"></span><span class="player-name-mini" data-en="TBD" data-es="TBD">TBD</span><span class="match-score-mini">-</span></div>
+      </div></div>
+      <!-- QF.4 -->
+      <div class="match-slot"><div class="match" data-match="qf-m4">
+        <div class="match-meta" data-en="TBD" data-es="TBD">TBD</div>
+        <div class="match-player tbd"><span class="player-seed-mini"></span><span class="player-flag-mini empty"></span><span class="player-name-mini" data-en="TBD" data-es="TBD">TBD</span><span class="match-score-mini">-</span></div>
+        <div class="match-player tbd"><span class="player-seed-mini"></span><span class="player-flag-mini empty"></span><span class="player-name-mini" data-en="TBD" data-es="TBD">TBD</span><span class="match-score-mini">-</span></div>
+      </div></div>
+          </div>
+        </div>
+        <div class="bracket-round" id="round-sf" data-round="sf">
+          <div class="bracket-round-header" data-en="Semi-Finals" data-es="Semifinales">Semi-Finals</div>
+          <div class="bracket-round-body">
+      <!-- SF.1 -->
+      <div class="match-slot"><div class="match" data-match="sf-m1">
+        <div class="match-meta" data-en="TBD" data-es="TBD">TBD</div>
+        <div class="match-player tbd"><span class="player-seed-mini"></span><span class="player-flag-mini empty"></span><span class="player-name-mini" data-en="TBD" data-es="TBD">TBD</span><span class="match-score-mini">-</span></div>
+        <div class="match-player tbd"><span class="player-seed-mini"></span><span class="player-flag-mini empty"></span><span class="player-name-mini" data-en="TBD" data-es="TBD">TBD</span><span class="match-score-mini">-</span></div>
+      </div></div>
+      <!-- SF.2 -->
+      <div class="match-slot"><div class="match" data-match="sf-m2">
+        <div class="match-meta" data-en="TBD" data-es="TBD">TBD</div>
+        <div class="match-player tbd"><span class="player-seed-mini"></span><span class="player-flag-mini empty"></span><span class="player-name-mini" data-en="TBD" data-es="TBD">TBD</span><span class="match-score-mini">-</span></div>
+        <div class="match-player tbd"><span class="player-seed-mini"></span><span class="player-flag-mini empty"></span><span class="player-name-mini" data-en="TBD" data-es="TBD">TBD</span><span class="match-score-mini">-</span></div>
+      </div></div>
+          </div>
+        </div>
+        <div class="bracket-round" id="round-f" data-round="f">
+          <div class="bracket-round-header" data-en="Final" data-es="Final">Final</div>
+          <div class="bracket-round-body">
+      <!-- Final -->
+      <div class="match-slot"><div class="match" data-match="f-m1">
+        <div class="match-meta" data-en="TBD" data-es="TBD">TBD</div>
+        <div class="match-player tbd"><span class="player-seed-mini"></span><span class="player-flag-mini empty"></span><span class="player-name-mini" data-en="TBD" data-es="TBD">TBD</span><span class="match-score-mini">-</span></div>
+        <div class="match-player tbd"><span class="player-seed-mini"></span><span class="player-flag-mini empty"></span><span class="player-name-mini" data-en="TBD" data-es="TBD">TBD</span><span class="match-score-mini">-</span></div>
+      </div></div>
+          </div>
+        </div>
+      </div>
+      <p class="draw-note" style="margin-top: 18px;" data-en="Match times, courts and live scores will be added closer to the event."
+         data-es="Los horarios, pistas y resultados en directo se añadirán próximos al evento.">Match times, courts and live scores will be added closer to the event.</p>
+    </div>
   </div>
 </section>
 
@@ -1087,6 +1366,48 @@ const mobileNav  = document.getElementById("mobile-nav");
 if (hamburger && mobileNav) {
   hamburger.addEventListener("click", () => mobileNav.classList.toggle("open"));
 }
+
+/* ======= BRACKET TAB SCROLLING ======= */
+(function() {
+  const bracket = document.getElementById("bracket");
+  const tabs    = document.querySelectorAll(".bracket-tab");
+  if (!bracket || !tabs.length) return;
+  let suppressScrollSync = 0;
+
+  // Click handler: smooth-scroll the bracket so the target round is visible at the left
+  tabs.forEach(tab => {
+    tab.addEventListener("click", (e) => {
+      e.preventDefault();
+      const targetId = tab.getAttribute("data-target");
+      const round    = document.getElementById(targetId);
+      if (!round) return;
+      // 4px left padding so the column isn't flush against the edge
+      bracket.scrollTo({ left: round.offsetLeft - 4, behavior: "smooth" });
+      tabs.forEach(t => t.classList.remove("active"));
+      tab.classList.add("active");
+      // Ignore scroll-sync events while the smooth-scroll animation is running
+      suppressScrollSync = Date.now() + 700;
+    });
+  });
+
+  // Highlight the currently most-visible round as the user scrolls manually
+  let scrollTimer;
+  bracket.addEventListener("scroll", () => {
+    if (Date.now() < suppressScrollSync) return;
+    clearTimeout(scrollTimer);
+    scrollTimer = setTimeout(() => {
+      const rounds = bracket.querySelectorAll(".bracket-round");
+      const scrollLeft = bracket.scrollLeft + bracket.clientWidth * 0.25; // 25% from left
+      let closest = rounds[0];
+      let closestDist = Infinity;
+      rounds.forEach(r => {
+        const dist = Math.abs(r.offsetLeft - scrollLeft);
+        if (dist < closestDist) { closestDist = dist; closest = r; }
+      });
+      tabs.forEach(t => t.classList.toggle("active", t.getAttribute("data-target") === closest.id));
+    }, 80);
+  }, { passive: true });
+})();
 </script>
 </body>
 </html>
