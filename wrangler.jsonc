@@ -1,0 +1,10 @@
+{
+  "name": "madrid-squash-open",
+  "main": "src/index.js",
+  "compatibility_date": "2026-05-29",
+  "assets": {
+    "directory": "./",
+    "binding": "ASSETS",
+    "run_worker_first": ["/api/*"]
+  }
+}
