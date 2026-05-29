@@ -1281,13 +1281,43 @@
 const navbar = document.getElementById("navbar");
 window.addEventListener("scroll", () => { navbar.classList.toggle("scrolled", window.scrollY > 40); }, {passive:true});
 
-/* ======= SMOOTH SCROLL — intercept ALL internal anchor clicks ======= */
+/* ======= SMOOTH SCROLL — intercept ALL internal anchor clicks =======
+   Adaptive: re-scrolls if the target's position shifts within ~2s of the
+   click, so late-loading content (Future Ticketing widget, lazy images,
+   embeds) doesn't strand the user mid-page. Bails on any user input. */
 function smoothScrollTo(id) {
   const el = document.getElementById(id);
   if (!el) return;
   const offset = parseInt(getComputedStyle(document.documentElement).getPropertyValue("--nav-h")) || 72;
-  const top = el.getBoundingClientRect().top + window.scrollY - offset;
-  window.scrollTo({ top, behavior: "smooth" });
+  const targetTop = () => el.getBoundingClientRect().top + window.scrollY - offset;
+
+  window.scrollTo({ top: targetTop(), behavior: "smooth" });
+
+  let lastTarget = targetTop();
+  let interrupted = false;
+  const stopWatching = () => { interrupted = true; };
+  // Treat any explicit user input as a signal to stop chasing the target
+  window.addEventListener("wheel",      stopWatching, { passive: true, once: true });
+  window.addEventListener("touchstart", stopWatching, { passive: true, once: true });
+  window.addEventListener("keydown",    stopWatching, { once: true });
+
+  // Poll the target every 100ms for 2s; re-scroll if content above the target
+  // has shifted it by more than 4px (filters rounding noise from layout calcs)
+  const intervalId = setInterval(() => {
+    if (interrupted) { clearInterval(intervalId); return; }
+    const newTarget = targetTop();
+    if (Math.abs(newTarget - lastTarget) > 4) {
+      window.scrollTo({ top: newTarget, behavior: "smooth" });
+      lastTarget = newTarget;
+    }
+  }, 100);
+
+  setTimeout(() => {
+    clearInterval(intervalId);
+    window.removeEventListener("wheel",      stopWatching);
+    window.removeEventListener("touchstart", stopWatching);
+    window.removeEventListener("keydown",    stopWatching);
+  }, 2000);
 }
 
 document.addEventListener("click", function(e) {
