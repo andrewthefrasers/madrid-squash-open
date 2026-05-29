@@ -252,14 +252,25 @@ function transformMatch(m, playerMap) {
   // Meta (date / time / court)
   const meta = buildMetaForMatch(m);
 
-  // Result
+  // Result with per-player (top/bottom) game scores
   let result = null;
   if (m.status === "completed" && m.result) {
+    const topId    = (playerTop    && playerTop.type    === "player") ? playerTop.id    : null;
+    const bottomId = (playerBottom && playerBottom.type === "player") ? playerBottom.id : null;
+    // Match PSA's m.players[] order to our top/bottom layout via player ID
+    const topPsaIndex    = topId    != null ? m.players.findIndex(p => p.id === topId)    : -1;
+    const bottomPsaIndex = bottomId != null ? m.players.findIndex(p => p.id === bottomId) : -1;
     result = {
       winner_id: m.result.winner_id,
       retired: m.result.retired,
       walkover: m.result.walkover,
-      games: (m.result.games || []).map(g => `${g.scores[0]}-${g.scores[1]}`)
+      best_of: (m.best === "best_of_5") ? 5 : 3,
+      games: (m.result.games || []).map(g => ({
+        num: g.num,
+        top_score:    topPsaIndex    >= 0 ? g.scores[topPsaIndex]    : null,
+        bottom_score: bottomPsaIndex >= 0 ? g.scores[bottomPsaIndex] : null,
+        winner_id: g.winner_id
+      }))
     };
   }
 
