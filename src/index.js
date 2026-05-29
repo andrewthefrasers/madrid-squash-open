@@ -11,13 +11,18 @@
 const PSA_BASE = "https://data.psasquashtour.com/api/v1";
 const TOURNAMENT_ID = "12524"; // Madrid Squash Open 2026
 
-// === BYE & qualifier orientation lookup tables ===
-// PSA tells us which player has a bye / which player is in a qualifier slot,
-// but not which side of the match-box (top/bottom) the BYE or "Qualifier"
-// placeholder should be displayed on. These maps mirror the current site's
-// visual layout. Key = match_num within Round 1.
-const R1_BYE_SIDE = { 1: "top", 4: "top", 5: "bottom", 8: "top", 9: "bottom", 12: "top", 13: "bottom", 16: "top" };
-const R1_QUALIFIER_SIDE = { 2: "top", 10: "top" }; // qualifier placeholder side
+// === Match slot orientation (top vs bottom of the match box) ===
+// Single-elimination convention: the side a player appears on in the current
+// round mirrors the slot they'll occupy in the next round. Winners of
+// odd-numbered matches go to the TOP of the next round's match;
+// winners of even-numbered matches go to the BOTTOM. So the "winner-elect"
+// of an R1 match (the seed in a bye match, or the named player in a
+// qualifier-placeholder match) appears on:
+//   odd  match_num  → TOP    (bye/qualifier placeholder on bottom)
+//   even match_num  → BOTTOM (bye/qualifier placeholder on top)
+function realPlayerOnTop(match_num) {
+  return match_num % 2 === 1;
+}
 
 // === IOC country code → flag-icons CSS class suffix ===
 const IOC_TO_FLAG = {
@@ -203,36 +208,34 @@ function transformMatch(m, playerMap) {
   let playerTop, playerBottom;
 
   if (m.bye) {
-    // Bye: one player listed, BYE on the other side per lookup table
+    // Bye match: one player listed, BYE on the opposite side
     const player = m.players[0] ? playerSlotFromPsa(m.players[0], playerMap) : { type: "tbd" };
-    const byeSide = R1_BYE_SIDE[m.match_num] || "top";
-    if (byeSide === "top") {
-      playerTop = { type: "bye" };
-      playerBottom = player;
-    } else {
+    if (realPlayerOnTop(m.match_num)) {
       playerTop = player;
       playerBottom = { type: "bye" };
+    } else {
+      playerTop = { type: "bye" };
+      playerBottom = player;
     }
   } else if (m.players.length === 0) {
-    // Empty (QF/SF/F before fill, or empty R16 slot)
+    // Empty (QF/SF/F before fill)
     playerTop = { type: "tbd" };
     playerBottom = { type: "tbd" };
   } else if (m.players.length === 1) {
     const player = playerSlotFromPsa(m.players[0], playerMap);
     if (m.round_num === 1) {
-      // R1 with 1 player = qualifier placeholder situation
-      const qSide = R1_QUALIFIER_SIDE[m.match_num] || "top";
-      if (qSide === "top") {
-        playerTop = { type: "qualifier" };
-        playerBottom = player;
-      } else {
+      // R1 with 1 player = qualifier placeholder; same parity rule
+      if (realPlayerOnTop(m.match_num)) {
         playerTop = player;
         playerBottom = { type: "qualifier" };
+      } else {
+        playerTop = { type: "qualifier" };
+        playerBottom = player;
       }
     } else {
-      // R16+ with 1 player = pre-placed seed waiting for previous winner
-      // Convention: odd match_num → player on top, even → player on bottom
-      if (m.match_num % 2 === 1) {
+      // R16+ with 1 player = pre-placed seed awaiting previous winner;
+      // same parity rule (odd → player on top)
+      if (realPlayerOnTop(m.match_num)) {
         playerTop = player;
         playerBottom = { type: "tbd" };
       } else {
