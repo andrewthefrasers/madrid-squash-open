@@ -289,7 +289,36 @@
     .bracket::-webkit-scrollbar { height: 8px; }
     .bracket::-webkit-scrollbar-track { background: rgba(255,255,255,.04); border-radius: 4px; }
     .bracket::-webkit-scrollbar-thumb { background: rgba(0,168,232,.4); border-radius: 4px; }
-    .bracket-round { display: flex; flex-direction: column; flex-shrink: 0; width: 220px; }
+    .bracket-round { display: flex; flex-direction: column; flex-shrink: 0; width: 320px; }
+    /* layout block — kept for selectors below */
+    .match-block { flex: 1; }
+    .match { width: 100%; background: var(--navy2); border-radius: 3px; border: 1px solid rgba(255,255,255,.05); overflow: hidden; }
+    /* Player row: [seed][flag][name flex][total][g1][g2][g3][g4][g5] */
+    .match-player {
+      display: grid;
+      grid-template-columns: 18px 20px 1fr 28px repeat(5, 22px);
+      align-items: center; gap: 6px; padding: 8px 10px;
+      font-family: "Barlow Condensed", sans-serif; font-weight: 700; font-size: .82rem;
+      color: var(--text); border-bottom: 1px solid rgba(255,255,255,.05);
+    }
+    .match-player:last-child { border-bottom: none; }
+    .match-player.bye { color: var(--muted); font-style: italic; background: rgba(0,0,0,.12); }
+    .match-player.tbd { color: var(--muted); }
+    .match-player.tbd .player-name-mini { font-style: italic; }
+    .match-player.winner { color: var(--white); }
+    .player-seed-mini { font-size: .65rem; color: var(--accent); font-weight: 800; letter-spacing: .03em; text-align: center; }
+    .player-flag-mini { width: 20px; height: 14px; border-radius: 1px; box-shadow: 0 0 0 1px rgba(255,255,255,.08); background-size: cover; background-position: center; }
+    .player-flag-mini.empty { visibility: hidden; }
+    .player-name-mini { min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.2; }
+
+    /* Total games column — bold/prominent; gold when winner */
+    .match-score-mini { font-size: 1rem; color: var(--muted); font-variant-numeric: tabular-nums; font-weight: 800; text-align: center; padding: 2px 4px; background: rgba(0,0,0,.25); border-radius: 3px; line-height: 1.2; }
+    .match-player.winner .match-score-mini { color: var(--gold); background: rgba(240,195,48,.15); }
+
+    /* Per-game score cells — smaller, muted, tabular */
+    .match-game-cell { font-size: .78rem; color: var(--muted); font-variant-numeric: tabular-nums; font-weight: 700; text-align: center; line-height: 1.2; }
+    .match-player.winner .match-game-cell { color: var(--text); }
+    .match-game-cell.empty { color: rgba(123,160,187,.35); }
     .bracket-round-header { text-align: center; font-family: "Barlow Condensed", sans-serif; font-weight: 800; font-size: .82rem; letter-spacing: .18em; text-transform: uppercase; color: var(--accent); padding: 10px 0; margin-bottom: 12px; background: rgba(0,168,232,.08); border-radius: 3px; }
     .bracket-round-body { flex: 1; display: flex; flex-direction: column; gap: 6px; }
     .match-slot { flex: 1; display: flex; align-items: center; position: relative; }
@@ -297,22 +326,6 @@
     .bracket-round[data-round="qf"] .match-slot { flex: 4; }
     .bracket-round[data-round="sf"] .match-slot { flex: 8; }
     .bracket-round[data-round="f"] .match-slot { flex: 16; }
-    .match { width: 100%; background: var(--navy2); border-radius: 3px; border: 1px solid rgba(255,255,255,.05); overflow: hidden; }
-    .match-player { display: flex; align-items: center; gap: 8px; padding: 8px 10px; font-family: "Barlow Condensed", sans-serif; font-weight: 700; font-size: .82rem; color: var(--text); border-bottom: 1px solid rgba(255,255,255,.05); }
-    .match-player:last-child { border-bottom: none; }
-    .match-player.bye { color: var(--muted); font-style: italic; background: rgba(0,0,0,.12); }
-    .match-player.tbd { color: var(--muted); }
-    .match-player.tbd .player-name-mini { font-style: italic; }
-    .match-player.winner { color: var(--white); }
-    .player-seed-mini { font-size: .65rem; color: var(--accent); font-weight: 800; letter-spacing: .03em; min-width: 14px; text-align: center; flex-shrink: 0; }
-    .player-flag-mini { width: 20px; height: 14px; border-radius: 1px; box-shadow: 0 0 0 1px rgba(255,255,255,.08); background-size: cover; background-position: center; flex-shrink: 0; }
-    .player-flag-mini.empty { visibility: hidden; }
-    .player-name-mini { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.2; }
-    /* Score column: visible pill on the right edge of each player row. Empty state shows a dash. */
-    .match-score-mini { font-size: .95rem; color: var(--muted); font-variant-numeric: tabular-nums; font-weight: 800; margin-left: 8px; flex-shrink: 0; min-width: 24px; text-align: center; padding: 2px 6px; background: rgba(0,0,0,.25); border-radius: 3px; line-height: 1.2; }
-    .match-player.winner .match-score-mini { color: var(--gold); background: rgba(240,195,48,.12); }
-    /* Optional game-by-game scores strip (e.g. "11-9, 11-5, 8-11, 11-7"). Add below the two player rows when a match completes. */
-    .match-games { font-family: "Barlow Condensed", sans-serif; font-size: .68rem; letter-spacing: .04em; color: var(--muted); padding: 5px 10px; background: rgba(0,0,0,.18); border-top: 1px solid rgba(255,255,255,.05); text-align: center; font-variant-numeric: tabular-nums; }
     /* Right-going connector line: rounds 1-4 */
     .bracket-round:not([data-round="f"]) .match-slot::after { content: ''; position: absolute; top: 50%; left: 100%; width: 18px; height: 2px; background: var(--line); transform: translateY(-1px); pointer-events: none; }
     /* T-shape on left (vertical line + horizontal stub): rounds 2-5 — extended ~3px past 25%/75% to bridge match-slot gap */
@@ -454,8 +467,9 @@
       .scroll-hint { display: none; }
       .hero-content { padding-bottom: 24px; }
       .bracket-scroll-hint { display: block; }
-      .bracket-round { width: 180px; }
-      .bracket .match-player { font-size: .78rem; padding: 7px 8px; }
+      .bracket-round { width: 270px; }
+      .bracket .match-player { grid-template-columns: 16px 18px 1fr 26px repeat(5, 19px); font-size: .78rem; padding: 7px 8px; gap: 5px; }
+      .bracket .match-game-cell { font-size: .72rem; }
     }
     @media (max-width:480px) {
       h1.hero-title { font-size: 3.3rem; }
@@ -463,9 +477,11 @@
       .hero-meta-sep { display: none; }
       .draw-grid { grid-template-columns: 1fr; }
       .nav-logo img { height: 28px; }
-      .bracket-round { width: 158px; }
+      .bracket-round { width: 232px; }
       .bracket .player-flag-mini { width: 16px; height: 11px; }
-      .bracket .match-player { font-size: .72rem; padding: 6px 7px; gap: 6px; }
+      .bracket .match-player { grid-template-columns: 14px 16px 1fr 22px repeat(5, 16px); font-size: .72rem; padding: 6px 6px; gap: 4px; }
+      .bracket .match-game-cell { font-size: .68rem; }
+      .bracket .match-score-mini { font-size: .88rem; padding: 1px 2px; }
       .bracket .player-seed-mini { font-size: .6rem; min-width: 12px; }
     }
   </style>

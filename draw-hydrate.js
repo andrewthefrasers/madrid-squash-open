@@ -11,30 +11,57 @@
  * ============================================================================ */
 (function () {
   const DRAW_ENDPOINT = "/api/draw";
+  const POLL_INTERVAL_MS = 30000; // 30s — live score refresh
   const drawGrid = document.getElementById("draw-men");
   const bracketEl = document.getElementById("bracket");
-  if (!drawGrid || !bracketEl) return; // pages without the bracket section
+  if (!drawGrid || !bracketEl) return;
 
-  fetch(DRAW_ENDPOINT, { credentials: "omit" })
-    .then(r => {
-      if (!r.ok) throw new Error(`HTTP ${r.status}`);
-      return r.json();
-    })
-    .then(data => {
-      if (!data || !data.players || !data.matches) {
-        console.warn("[draw-hydrate] unexpected response shape, keeping static markup", data);
-        return;
-      }
-      renderDrawSection(drawGrid, data.players);
-      renderBracket(bracketEl, data.matches);
-      if (typeof setLang === "function" && typeof currentLang !== "undefined") {
-        setLang(currentLang);
-      }
-      console.log(`[draw-hydrate] rendered ${data.players.length} cards, ${data.matches.length} matches (generated ${data.generated_at})`);
-    })
-    .catch(err => {
-      console.warn("[draw-hydrate] fetch failed, keeping static markup:", err.message);
-    });
+  let lastGeneratedAt = null;
+  let pollHandle = null;
+
+  function hydrate() {
+    return fetch(DRAW_ENDPOINT + "?ts=" + Date.now(), { credentials: "omit", cache: "no-store" })
+      .then(r => {
+        if (!r.ok) throw new Error(`HTTP ${r.status}`);
+        return r.json();
+      })
+      .then(data => {
+        if (!data || !data.players || !data.matches) {
+          console.warn("[draw-hydrate] unexpected response shape", data);
+          return;
+        }
+        if (data.generated_at && data.generated_at === lastGeneratedAt) {
+          return; // no change, skip re-render
+        }
+        lastGeneratedAt = data.generated_at;
+
+        // Preserve horizontal scroll position of the bracket on re-render
+        const prevScrollLeft = bracketEl.scrollLeft;
+        renderDrawSection(drawGrid, data.players);
+        renderBracket(bracketEl, data.matches);
+        bracketEl.scrollLeft = prevScrollLeft;
+
+        if (typeof setLang === "function" && typeof currentLang !== "undefined") {
+          setLang(currentLang);
+        }
+        console.log(`[draw-hydrate] rendered ${data.players.length} cards, ${data.matches.length} matches (generated ${data.generated_at})`);
+      })
+      .catch(err => {
+        console.warn("[draw-hydrate] fetch failed:", err.message);
+      });
+  }
+
+  // Initial render
+  hydrate();
+
+  // Poll every 30s while the tab is visible. Skip while hidden to save bandwidth and PSA calls.
+  function startPolling() { if (!pollHandle) pollHandle = setInterval(hydrate, POLL_INTERVAL_MS); }
+  function stopPolling()  { if (pollHandle) { clearInterval(pollHandle); pollHandle = null; } }
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) stopPolling();
+    else { hydrate(); startPolling(); }
+  });
+  if (!document.hidden) startPolling();
 
   // ===========================================================================
   // DRAW SECTION (the 22-card grid)
@@ -132,26 +159,44 @@
     const metaEn = m.meta.text_en || "TBD";
     const metaEs = m.meta.text_es || "TBD";
     const metaCls = m.meta.scheduled ? "match-meta scheduled" : "match-meta";
-    let gamesHtml = "";
-    if (m.result && m.result.games && m.result.games.length) {
-      gamesHtml = `<div class="match-games">${m.result.games.join(", ")}</div>`;
-    }
     const winnerId = m.result ? m.result.winner_id : null;
+    // Build two per-slot arrays of game scores (length 5, padded with null)
+    const topGames    = extractGameScores(m, "top");
+    const bottomGames = extractGameScores(m, "bottom");
     return `<div class="match-slot"><div class="match" data-match="${m.id}">`
       + `<div class="${metaCls}" data-en="${escapeHtml(metaEn)}" data-es="${escapeHtml(metaEs)}">${escapeHtml(metaEn)}</div>`
-      + slotHtml(m.player_top, winnerId)
-      + slotHtml(m.player_bottom, winnerId)
-      + gamesHtml
+      + slotHtml(m.player_top,    winnerId, topGames)
+      + slotHtml(m.player_bottom, winnerId, bottomGames)
       + `</div></div>`;
   }
 
-  function slotHtml(slot, winnerId) {
+  function extractGameScores(m, side) {
+    const out = [null, null, null, null, null];
+    if (!m.result || !m.result.games) return out;
+    m.result.games.forEach(g => {
+      const idx = (g.num || 1) - 1;
+      if (idx >= 0 && idx < 5) {
+        out[idx] = (side === "top") ? g.top_score : g.bottom_score;
+      }
+    });
+    return out;
+  }
+
+  function slotHtml(slot, winnerId, gameScores) {
+    // gameScores: array of 5 entries (number or null)
+    const gameCellsHtml = (gameScores || [null, null, null, null, null])
+      .map(s => s == null
+        ? `<span class="match-game-cell empty">-</span>`
+        : `<span class="match-game-cell">${s}</span>`)
+      .join("");
+
     if (!slot || slot.type === "tbd") {
       return `<div class="match-player tbd">`
         + `<span class="player-seed-mini"></span>`
         + `<span class="player-flag-mini empty"></span>`
         + `<span class="player-name-mini" data-en="TBD" data-es="TBD">TBD</span>`
         + `<span class="match-score-mini">-</span>`
+        + gameCellsHtml
         + `</div>`;
     }
     if (slot.type === "bye") {
@@ -160,6 +205,7 @@
         + `<span class="player-flag-mini empty"></span>`
         + `<span class="player-name-mini" data-en="BYE" data-es="BYE">BYE</span>`
         + `<span class="match-score-mini">-</span>`
+        + gameCellsHtml
         + `</div>`;
     }
     if (slot.type === "qualifier") {
@@ -168,6 +214,7 @@
         + `<span class="fi fi-un player-flag-mini"></span>`
         + `<span class="player-name-mini" data-en="Qualifier" data-es="Clasificatorio">Qualifier</span>`
         + `<span class="match-score-mini">-</span>`
+        + gameCellsHtml
         + `</div>`;
     }
     // type === "player"
@@ -181,6 +228,7 @@
       + flagHtml
       + `<span class="player-name-mini">${escapeHtml(slot.display_name)}</span>`
       + `<span class="match-score-mini">${escapeHtml(String(score))}</span>`
+      + gameCellsHtml
       + `</div>`;
   }
 
