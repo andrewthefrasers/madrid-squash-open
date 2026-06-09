@@ -37,6 +37,13 @@ const IOC_TO_FLAG = {
 
 const ROUND_NUM_TO_KEY = { 1: "r1", 2: "r16", 3: "qf", 4: "sf", 5: "f" };
 
+// === Follow-on (back-to-back court bookings) ===
+// PSA marks matches that start immediately after a predecessor on the same
+// court via follow_on=true + follow_on_match_id. The API doesn't compute the
+// estimated start time; we derive it as predecessor_time + this offset.
+// 45 min mirrors PSA's own UI and matches the average best-of-5 par-11 length.
+const FOLLOW_ON_OFFSET_MINUTES = 45;
+
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
@@ -126,6 +133,9 @@ function transformPsaToDraw(psa) {
 
   // Transform all 31 matches
   const matches = bracket.matches.map(m => transformMatch(m, playerMap));
+
+  // Second pass: estimated start times for follow-on (back-to-back) matches
+  resolveFollowOnTimes(matches);
 
   return {
     tournament: {
@@ -282,6 +292,8 @@ function transformMatch(m, playerMap) {
     match_num: m.match_num,
     bye: m.bye,
     status: m.status,
+    follow_on: Boolean(m.follow_on),
+    follow_on_psa_id: m.follow_on_match_id || null,
     player_top: playerTop,
     player_bottom: playerBottom,
     meta,
@@ -317,39 +329,80 @@ function buildMetaForMatch(m) {
   if (!m.date && !m.time) {
     return {
       date: null, time: null, court: null,
-      scheduled: false,
+      scheduled: false, is_estimated: false,
       text_en: "TBD", text_es: "TBD"
     };
   }
+  const meta = {
+    date: m.date || null,
+    time: m.time ? m.time.slice(0, 5) : null,
+    court: m.court || null,
+    scheduled: true,
+    is_estimated: false
+  };
+  rebuildMetaText(meta);
+  return meta;
+}
 
+// Composes meta.text_en and meta.text_es from current date/time/court/is_estimated.
+// Called when meta is first built, and again after follow-on estimation.
+function rebuildMetaText(meta) {
   const parts_en = [];
   const parts_es = [];
-
-  if (m.date) {
-    const d = new Date(m.date + "T00:00:00Z");
+  if (meta.date) {
+    const d = new Date(meta.date + "T00:00:00Z");
     const opts = { weekday: "short", day: "numeric", month: "short" };
     parts_en.push(d.toLocaleDateString("en-GB", opts).toUpperCase());
     parts_es.push(d.toLocaleDateString("es-ES", opts).toUpperCase());
   }
-  if (m.time) {
-    // PSA times are "HH:MM" — strip seconds if present
-    const t = m.time.slice(0, 5);
-    parts_en.push(t);
-    parts_es.push(t);
+  if (meta.time) {
+    const t = meta.time.slice(0, 5);
+    parts_en.push(meta.is_estimated ? `Est. ${t}` : t);
+    parts_es.push(meta.is_estimated ? `Est. ${t}` : t);
   }
-  if (m.court) {
-    parts_en.push(`Court ${m.court}`);
-    parts_es.push(`Pista ${m.court}`);
+  if (meta.court) {
+    parts_en.push(`Court ${meta.court}`);
+    parts_es.push(`Pista ${meta.court}`);
   }
+  meta.text_en = parts_en.length ? parts_en.join(" · ") : "TBD";
+  meta.text_es = parts_es.length ? parts_es.join(" · ") : "TBD";
+}
 
-  return {
-    date: m.date,
-    time: m.time,
-    court: m.court,
-    scheduled: true,
-    text_en: parts_en.join(" · "),
-    text_es: parts_es.join(" · ")
-  };
+// Adds an HH:MM string to a number of minutes, wrapping at 24h. Used to project
+// estimated start times for follow-on matches.
+function addMinutesToHHMM(hhmm, minutes) {
+  const [h, m] = hhmm.split(":").map(Number);
+  const total = h * 60 + m + minutes;
+  const newH = ((Math.floor(total / 60) % 24) + 24) % 24;
+  const newM = ((total % 60) + 60) % 60;
+  return `${String(newH).padStart(2, "0")}:${String(newM).padStart(2, "0")}`;
+}
+
+// Walks the follow_on chain and fills in estimated times. Iterates until stable
+// so a chain of N back-to-back matches (A→B→C) all resolve correctly.
+function resolveFollowOnTimes(matches) {
+  const byPsaId = new Map(matches.map(m => [m.psa_id, m]));
+  for (let iter = 0; iter < 10; iter++) {
+    let changed = false;
+    for (const m of matches) {
+      if (!m.follow_on || m.follow_on_psa_id == null) continue;
+      // Skip if this match already has an explicit (non-estimated) time
+      if (m.meta.time && !m.meta.is_estimated) continue;
+      const pred = byPsaId.get(m.follow_on_psa_id);
+      if (!pred || !pred.meta.time) continue;
+      const newTime = addMinutesToHHMM(pred.meta.time, FOLLOW_ON_OFFSET_MINUTES);
+      // No-op if nothing to update
+      if (m.meta.time === newTime && m.meta.is_estimated) continue;
+      m.meta.time = newTime;
+      m.meta.is_estimated = true;
+      m.meta.scheduled = true;
+      if (!m.meta.date)  m.meta.date  = pred.meta.date;
+      if (!m.meta.court) m.meta.court = pred.meta.court;
+      rebuildMetaText(m.meta);
+      changed = true;
+    }
+    if (!changed) break;
+  }
 }
 
 // ============================================================================
