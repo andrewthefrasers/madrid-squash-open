@@ -262,12 +262,12 @@ function transformMatch(m, playerMap) {
   // Meta (date / time / court)
   const meta = buildMetaForMatch(m);
 
-  // Result with per-player (top/bottom) game scores
+  // Result/score data — populated for in-progress AND completed matches so that
+  // live games_won values and any partial per-game scores flow through.
   let result = null;
-  if (m.status === "completed" && m.result) {
+  if ((m.status === "in_progress" || m.status === "completed") && m.result) {
     const topId    = (playerTop    && playerTop.type    === "player") ? playerTop.id    : null;
     const bottomId = (playerBottom && playerBottom.type === "player") ? playerBottom.id : null;
-    // Match PSA's m.players[] order to our top/bottom layout via player ID
     const topPsaIndex    = topId    != null ? m.players.findIndex(p => p.id === topId)    : -1;
     const bottomPsaIndex = bottomId != null ? m.players.findIndex(p => p.id === bottomId) : -1;
     result = {
