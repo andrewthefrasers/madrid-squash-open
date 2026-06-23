@@ -319,6 +319,21 @@
     .match-game-cell { font-size: .78rem; color: var(--muted); font-variant-numeric: tabular-nums; font-weight: 700; text-align: center; line-height: 1.2; }
     .match-player.winner .match-game-cell { color: var(--text); }
     .match-game-cell.empty { color: rgba(123,160,187,.35); }
+
+    /* In-progress match — pulsing LIVE indicator in the meta strip */
+    .match.is-live { box-shadow: 0 0 0 1px rgba(255,80,80,.4), 0 0 12px rgba(255,80,80,.18); }
+    .match.is-live .match-meta::before {
+      content: "● LIVE · ";
+      color: #ff5050;
+      font-weight: 800;
+      letter-spacing: .04em;
+      animation: live-pulse 1.6s ease-in-out infinite;
+    }
+    @keyframes live-pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: .45; }
+    }
+    .match.is-live .match-player .match-score-mini { color: var(--white); }
     .bracket-round-header { text-align: center; font-family: "Barlow Condensed", sans-serif; font-weight: 800; font-size: .82rem; letter-spacing: .18em; text-transform: uppercase; color: var(--accent); padding: 10px 0; margin-bottom: 12px; background: rgba(0,168,232,.08); border-radius: 3px; }
     .bracket-round-body { flex: 1; display: flex; flex-direction: column; gap: 6px; }
     .match-slot { flex: 1; display: flex; align-items: center; position: relative; }
@@ -757,7 +772,7 @@
     <div class="ticket-tiers">
       <div class="ticket-card">
         <div class="ticket-name" data-en="Round 1 and Round 2 Sessions" data-es="Sesiones de Ronda 1 y Ronda 2">Round 1 and Round 2 Sessions</div>
-        <div class="ticket-price"><sup>€</sup>FREE - GRATIS</div>
+        <div class="ticket-price"><sup>€</sup>20</div>
         <div class="ticket-desc" data-en="Any single session — Rounds 1 &amp; 2" data-es="Cualquier sesión — Rondas 1 y 2">Any single session — Rounds 1 &amp; 2</div>
         <ul class="ticket-features">
           <li class="ticket-feature" data-en="All-session court access" data-es="Acceso durante toda la sesión">All-session court access</li>
@@ -779,7 +794,7 @@
       <div class="ticket-card">
         <div class="ticket-name" data-en="VIP Catering" data-es="Catering VIP">VIP Catering</div>
         <div class="ticket-price"><sup>€</sup>30</div>
-        <div class="ticket-desc" data-en="Saturday · Full VIP experience" data-es="Sábado · Experiencia VIP completa">Saturday · Full VIP experience</div>
+        <div class="ticket-desc" data-en="Friday &amp; Saturday · Full VIP experience" data-es="Viernes y Sábado · Experiencia VIP completa">Friday &amp; Saturday · Full VIP experience</div>
         <ul class="ticket-features">
           <li class="ticket-feature" data-en="VIP Catering (food &amp; drink)" data-es="Catering VIP (comida y bebida)">VIP Catering (food &amp; drink)</li>
           <li class="ticket-feature" data-en="Player meet &amp; greet" data-es="Encuentro con jugadores">Player meet &amp; greet</li>
