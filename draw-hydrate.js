@@ -159,14 +159,19 @@
     const metaEn = m.meta.text_en || "TBD";
     const metaEs = m.meta.text_es || "TBD";
     const metaCls = m.meta.scheduled ? "match-meta scheduled" : "match-meta";
+    const isLive = m.status === "in_progress";
+    const isCompleted = m.status === "completed";
+    // Show games-won + per-game scores whenever PSA has live or final data
+    const showScores = isLive || isCompleted;
     const winnerId = m.result ? m.result.winner_id : null;
+    const matchCls = isLive ? "match is-live" : "match";
     // Build two per-slot arrays of game scores (length 5, padded with null)
     const topGames    = extractGameScores(m, "top");
     const bottomGames = extractGameScores(m, "bottom");
-    return `<div class="match-slot"><div class="match" data-match="${m.id}">`
+    return `<div class="match-slot"><div class="${matchCls}" data-match="${m.id}">`
       + `<div class="${metaCls}" data-en="${escapeHtml(metaEn)}" data-es="${escapeHtml(metaEs)}">${escapeHtml(metaEn)}</div>`
-      + slotHtml(m.player_top,    winnerId, topGames)
-      + slotHtml(m.player_bottom, winnerId, bottomGames)
+      + slotHtml(m.player_top,    winnerId, topGames,    showScores)
+      + slotHtml(m.player_bottom, winnerId, bottomGames, showScores)
       + `</div></div>`;
   }
 
@@ -182,7 +187,7 @@
     return out;
   }
 
-  function slotHtml(slot, winnerId, gameScores) {
+  function slotHtml(slot, winnerId, gameScores, showScores) {
     // gameScores: array of 5 entries (number or null)
     const gameCellsHtml = (gameScores || [null, null, null, null, null])
       .map(s => s == null
@@ -222,7 +227,7 @@
     const winnerCls = isWinner ? " winner" : "";
     const seedHtml = slot.seed ? `<span class="player-seed-mini">${slot.seed}</span>` : `<span class="player-seed-mini"></span>`;
     const flagHtml = slot.country ? `<span class="fi fi-${escapeHtml(slot.country)} player-flag-mini"></span>` : `<span class="player-flag-mini empty"></span>`;
-    const score = (winnerId != null) ? slot.games_won : "-";
+    const score = showScores ? slot.games_won : "-";
     return `<div class="match-player${winnerCls}">`
       + seedHtml
       + flagHtml
