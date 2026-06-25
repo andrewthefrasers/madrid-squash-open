@@ -16,6 +16,7 @@
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"/>
   <link rel="manifest" href="/site.webmanifest"/>
   <meta name="theme-color" content="#001b2d"/>
+  <link rel="stylesheet" href="/replays-styles.css"/>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
@@ -1117,7 +1118,10 @@
         <span class="label" data-en="Gallery" data-es="Galería">Gallery</span>
         <h2 class="section-title" style="margin-bottom:0" data-en="Photos &amp; Highlights" data-es="Fotos y Destacados">Photos &amp; Highlights</h2>
       </div>
-      <a href="https://www.instagram.com/madridsquashopen/" target="_blank" class="btn btn-outline" data-en="View All on Instagram" data-es="Ver Todo en Instagram">View All on Instagram</a>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center">
+        <a href="https://photos.app.goo.gl/1FM91SXBMgLNX4hg7" target="_blank" rel="noopener" class="btn btn-accent" data-en="View Full Gallery" data-es="Ver Galería Completa">View Full Gallery</a>
+        <a href="https://www.instagram.com/madridsquashopen/" target="_blank" class="btn btn-outline" data-en="View All on Instagram" data-es="Ver Todo en Instagram">View All on Instagram</a>
+      </div>
     </div>
     <div class="gallery-grid">
       <div class="gallery-item"><div class="g-placeholder"><img src="images/Galeria1.jpg" alt="Players on Court 1"></div></div>
@@ -1235,6 +1239,10 @@
         <a href="https://www.youtube.com/@clubsquashtrescantos5985/streams" target="_blank" class="btn btn-accent" style="align-self:flex-start" data-en="▶ Ver en Español" data-es="▶ Ver en Español">▶ Ver en Español</a>
       </div>
     </div>
+    <div class="replays-head">
+      <span class="label" data-en="Session Replays" data-es="Repeticiones de Sesión">Session Replays</span>
+    </div>
+    <div id="replays-container"></div>
   </div>
 </section>
 
@@ -1465,5 +1473,6 @@ if (hamburger && mobileNav) {
 </script>
 <script src="/draw-hydrate.js" defer></script>
 <script src="/news-hydrate.js" defer></script>
+<script src="/replays-hydrate.js" defer></script>
 </body>
 </html>
