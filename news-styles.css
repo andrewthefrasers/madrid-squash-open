@@ -8,6 +8,11 @@
 
 /* Make dynamic cards behave as buttons */
 #news-container .news-card { cursor: pointer; }
+
+/* Fill the 16:9 card image box by cropping, not stretching (fixes distortion
+   on photos that aren't exactly 16:9). Higher specificity than the base
+   .news-img-inner rule, so no index.html change is needed. */
+#news-container .news-img-inner { object-fit: cover; object-position: center; }
 #news-container .news-card:focus-visible {
   outline: none;
   box-shadow: 0 0 0 3px var(--accent, #00a8e8);
