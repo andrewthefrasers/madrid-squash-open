@@ -9,6 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,300;0,400;0,600;0,700;1,400&family=Barlow+Condensed:wght@400;700;800&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.5.0/css/flag-icons.min.css"/>
+  <link rel="stylesheet" href="/news-styles.css"/>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
@@ -1095,32 +1096,7 @@
   <div class="container">
     <span class="label" data-en="Latest News" data-es="Últimas Noticias">Latest News</span>
     <h2 class="section-title" data-en="News &amp; Updates" data-es="Noticias y Novedades">News &amp; Updates</h2>
-    <div class="news-grid">
-      <article class="news-card">
-        <div class="news-img"><img src="images/Pista3C.jpg" alt="Tournament Update" class="news-img-inner"><span class="news-category" data-en="Announcement" data-es="Anuncio">Announcement</span></div>
-        <div class="news-body">
-          <div class="news-date">2026</div>
-          <h3 class="news-headline" data-en="Madrid Squash Open confirmed on the PSA World Tour 2026 calendar" data-es="Madrid Squash Open confirmado en el calendario PSA World Tour 2026">Madrid Squash Open confirmed on the PSA World Tour 2026 calendar</h3>
-          <p class="news-excerpt" data-en="The event has been officially sanctioned by the PSA as a Challenger 15K, taking place 23–27 June at Club de Squash Tres Cantos." data-es="El torneo ha sido sancionado oficialmente por la PSA como Challenger 15K, del 23 al 27 de junio en el Club de Squash Tres Cantos.">The event has been officially sanctioned by the PSA as a Challenger 15K, taking place 23–27 June at Club de Squash Tres Cantos.</p>
-        </div>
-      </article>
-      <article class="news-card">
-        <div class="news-img"><img src="images/Cuarteto.jpg" alt="Tournament Update" class="news-img-inner"><span class="news-category" data-en="Tickets" data-es="Entradas">Tickets</span></div>
-        <div class="news-body">
-          <div class="news-date" data-en="Coming Soon" data-es="Próximamente">Coming Soon</div>
-          <h3 class="news-headline" data-en="Tickets now on sale — secure your seat for Finals Day" data-es="Entradas a la venta — asegura tu sitio para el Día de la Final">Tickets now on sale — secure your seat for Finals Day</h3>
-          <p class="news-excerpt" data-en="Don't miss the biggest night: the Final, live music show and closing ceremony on Saturday 27 June." data-es="No te pierdas la noche más especial: la Final, actuación musical y ceremonia de cierre el sábado 27 de junio.">Don't miss the biggest night: the Final, live music show and closing ceremony on Saturday 27 June.</p>
-        </div>
-      </article>
-      <article class="news-card">
-        <div class="news-img"><img src="images/partners/aptitude2.png" alt="Tournament Update" class="news-img-inner"><span class="news-category" data-en="Sponsorship" data-es="Patrocinio">Sponsorship</span></div>
-        <div class="news-body">
-          <div class="news-date" data-en="Coming Soon" data-es="Próximamente">Coming Soon</div>
-          <h3 class="news-headline" data-en="Aptitude join as sponsor for the Madrid Squash Open" data-es="Aptitude se une como patrocinador del Madrid Squash Open">Aptitude join as sponsor for the Madrid Squash Open</h3>
-          <p class="news-excerpt" data-en="We are delighted to welcome Aptitude as a partner for Madrid's first masculine PSA World Tour event." data-es="Nos complace dar la bienvenida a Aptitude como patrocinador del primer evento masculino PSA World Tour de Madrid.">We are delighted to welcome Aptitude as a partner for Madrid's first masculine PSA World Tour event.</p>
-        </div>
-      </article>
-    </div>
+    <div id="news-container"></div>
     <div style="text-align:center;margin-top:40px">
       <a href="https://www.instagram.com/madridsquashopen/" target="_blank" class="btn btn-outline" data-en="Follow on Instagram for Updates" data-es="Síguenos en Instagram para Novedades">Follow on Instagram for Updates</a>
     </div>
@@ -1409,6 +1385,7 @@ function setLang(lang) {
       el.textContent = val;
     }
   });
+  if (window.MSO_setNewsLang) window.MSO_setNewsLang(lang);
 }
 
 /* ======= SCROLL REVEAL ======= */
@@ -1481,5 +1458,6 @@ if (hamburger && mobileNav) {
 })();
 </script>
 <script src="/draw-hydrate.js" defer></script>
+<script src="/news-hydrate.js" defer></script>
 </body>
 </html>

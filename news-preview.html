@@ -1,0 +1,439 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MSO News — preview</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,300;0,400;0,600;0,700;1,400&family=Barlow+Condensed:wght@400;700;800&display=swap" rel="stylesheet"/>
+<style>
+:root {
+      --navy:     #001b2d;
+      --navy2:    #002d4c;
+      --navy3:    #003c66;
+      --navy4:    #004d82;
+      --accent:   #00a8e8;
+      --gold:     #f0c330;
+      --gold2:    #c9a227;
+      --white:    #ffffff;
+      --text:     #d8e8f4;
+      --muted:    #7ba0bb;
+      --red:      #c8102e;
+      --nav-h:    72px;
+      --ease:     cubic-bezier(.22,.68,0,1.2);
+    }
+*{box-sizing:border-box}
+body{margin:0;background:var(--navy);color:var(--text);font-family:"Barlow",sans-serif}
+.container{max-width:1200px;margin:0 auto;padding:48px 24px 80px}
+.bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px;gap:16px;flex-wrap:wrap}
+.langbtn{border:2px solid rgba(255,255,255,.3);background:transparent;color:#fff;border-radius:4px;padding:8px 16px;font-family:"Barlow Condensed",sans-serif;font-weight:700;letter-spacing:.08em;text-transform:uppercase;cursor:pointer}
+.langbtn:hover{border-color:var(--gold);color:var(--gold)}
+.note{background:var(--navy3);border-left:3px solid var(--accent);border-radius:0 6px 6px 0;padding:12px 16px;margin-bottom:28px;font-size:.88rem;color:var(--text)}
+.news-img-inner{visibility:hidden} /* photos live at /images/news on the live site */
+
+
+
+.news-card:hover .news-img-inner { transform: scale(1.05); }
+
+
+
+
+
+
+
+
+
+/* ===========================================================================
+ * news-styles.css  —  Madrid Squash Open
+ * The dynamic cards reuse the site's existing .news-card / .news-img / etc.,
+ * so this file only adds the full-article OVERLAY and a hero placeholder.
+ * Everything below uses the site's own custom properties (--navy, --accent…)
+ * and fonts (Bebas Neue / Barlow / Barlow Condensed) so it matches natively.
+ * ===========================================================================*/
+
+/* Make dynamic cards behave as buttons */
+#news-container .news-card { cursor: pointer; }
+#news-container .news-card:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--accent, #00a8e8);
+}
+.news-empty { color: var(--muted, #7ba0bb); font-style: italic; }
+
+/* Hero placeholder when an article has no image */
+.news-img--placeholder {
+  background:
+    radial-gradient(120% 140% at 50% 0%, var(--navy3, #003c66), var(--navy, #001b2d));
+  position: relative;
+}
+.news-img--placeholder::after {
+  content: "MADRID SQUASH OPEN";
+  position: absolute; inset: 0; display: grid; place-items: center;
+  font-family: "Bebas Neue", sans-serif; letter-spacing: .14em;
+  color: rgba(216, 232, 244, .18); font-size: 1.1rem;
+}
+
+/* ---- overlay ----------------------------------------------------------- */
+.news-noscroll { overflow: hidden; }
+#news-overlay { position: fixed; inset: 0; z-index: 4000; display: none; }
+#news-overlay.is-open { display: block; }
+.news-overlay__backdrop {
+  position: absolute; inset: 0;
+  background: rgba(0, 12, 22, .82); backdrop-filter: blur(3px);
+}
+.news-overlay__panel {
+  position: absolute; inset: 0;
+  width: 100%; max-height: 100%;
+  background: var(--navy2, #002d4c);
+  color: var(--text, #d8e8f4);
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+}
+@media (min-width: 760px) {
+  .news-overlay__panel {
+    inset: 4vh auto; left: 50%; transform: translateX(-50%);
+    width: min(760px, 92vw); max-height: 92vh;
+    border-radius: 8px;
+    box-shadow: 0 30px 80px rgba(0, 0, 0, .55);
+    border: 1px solid rgba(255, 255, 255, .08);
+  }
+}
+.news-overlay__close {
+  position: sticky; top: 14px; float: right;
+  margin: 14px 14px -3rem 0;
+  width: 42px; height: 42px; border: 0; border-radius: 50%;
+  background: rgba(0, 27, 45, .85); color: #fff;
+  font-size: 1.6rem; line-height: 1; cursor: pointer; z-index: 2;
+  transition: background .2s var(--ease, ease);
+}
+.news-overlay__close:hover { background: var(--accent, #00a8e8); color: var(--navy, #001b2d); }
+.news-overlay__content { padding: 1.6rem 1.4rem 2.6rem; }
+@media (min-width: 760px) { .news-overlay__content { padding: 2.4rem 2.8rem 3rem; } }
+
+/* ---- article ----------------------------------------------------------- */
+.news-article__back {
+  display: inline-block; margin-bottom: 1.3rem; padding: 0;
+  background: none; border: 0; cursor: pointer;
+  font-family: "Barlow Condensed", sans-serif; font-weight: 700;
+  font-size: .82rem; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--accent, #00a8e8);
+}
+.news-article__back:hover { color: var(--gold, #f0c330); }
+.news-article__date {
+  display: block; font-family: "Barlow Condensed", sans-serif; font-weight: 700;
+  font-size: .74rem; letter-spacing: .2em; text-transform: uppercase;
+  color: var(--gold, #f0c330); margin-bottom: .5rem;
+}
+.news-article__title {
+  font-family: "Bebas Neue", sans-serif; font-weight: 400;
+  font-size: clamp(2rem, 5.5vw, 3rem); line-height: 1.02;
+  color: var(--white, #fff); margin: 0 0 1.4rem;
+}
+.news-article__hero { margin: 0 0 1.6rem; border-radius: 6px; overflow: hidden; }
+.news-article__hero img { width: 100%; display: block; }
+.news-article__body {
+  font-family: "Barlow", sans-serif; font-size: 1.02rem; line-height: 1.72;
+  color: var(--text, #d8e8f4);
+}
+.news-article__body p { margin: 0 0 1.05rem; }
+.news-article__body strong { color: var(--white, #fff); font-weight: 700; }
+.news-article__body em { color: #eaf4fb; }
+.news-article__body a { color: var(--accent, #00a8e8); }
+.news-article__body h3, .news-article__body h4 {
+  font-family: "Barlow Condensed", sans-serif; font-weight: 700;
+  color: var(--white, #fff); letter-spacing: .02em;
+  margin: 1.7rem 0 .6rem; font-size: 1.15rem;
+}
+.news-article__body ul { margin: .2rem 0 1.2rem; padding: 0; list-style: none; }
+.news-article__body li {
+  padding: .5rem .9rem; margin-bottom: .4rem;
+  background: rgba(0, 168, 232, .08);
+  border-left: 3px solid var(--accent, #00a8e8);
+  border-radius: 0 4px 4px 0;
+  font-variant-numeric: tabular-nums;
+}
+.news-article__figure { margin: 1.7rem 0; }
+.news-article__figure img { width: 100%; border-radius: 6px; display: block; }
+.news-article__figure figcaption {
+  margin-top: .5rem; font-size: .82rem; font-style: italic;
+  color: var(--muted, #7ba0bb);
+}
+.news-article__source {
+  margin-top: 2rem; padding-top: 1.1rem;
+  border-top: 1px solid rgba(255, 255, 255, .12);
+  font-size: .85rem; color: var(--muted, #7ba0bb);
+}
+.news-article__source a { color: var(--accent, #00a8e8); }
+
+@media (prefers-reduced-motion: reduce) {
+  .news-overlay__close { transition: none; }
+}
+
+</style></head><body>
+<div class="container">
+ <div class="note">Local preview — image areas are intentionally blank because the real photos live at <code>/images/news/</code> on the deployed site. Click a card to open the full article overlay; use the button to switch language.</div>
+ <div class="bar">
+   <span class="label" id="lbl" style="margin:0">Latest News</span>
+   <h2 class="section-title" id="hd" style="margin:0">News &amp; Updates</h2>
+   <button class="langbtn" id="lang">Ver en Español</button>
+ </div>
+ <section id="news"><div id="news-container"></div></section>
+</div>
+<script>window.__PREVIEW__={"/news/index.json": {"articles": ["2026-06-25-aptitude-visit", "2026-06-24-day-2", "2026-06-23-day-1", "2026-06-22-opening-ceremony"]}, "/news/2026-06-25-aptitude-visit.json": {"slug": "2026-06-25-aptitude-visit", "date": "2026-06-25", "category_en": "Partners", "category_es": "Patrocinadores", "title_en": "Aptitude join the action courtside at the Madrid Squash Open", "title_es": "Aptitude se suma a la acci\u00f3n a pie de pista en el Madrid Squash Open", "summary_en": "The tournament's partners at Aptitude came down to the glass court this week to watch the squash \u2014 and left full of enthusiasm for the event.", "summary_es": "Aptitude, patrocinador del torneo, se acerc\u00f3 esta semana a la pista de cristal para ver el squash, y se march\u00f3 entusiasmado con el evento.", "hero_image": "aptitude-visit.jpg", "images": [], "source_url": "", "source_label_en": "", "source_label_es": "", "body_en": "The Madrid Squash Open was delighted to welcome the team from Aptitude to the Polideportivo de la Luz this week, as one of the tournament's partners came courtside to take in the action on the glass court.\n\nWatching alongside a lively Tres Cantos crowd, the Aptitude team got a close-up look at professional squash at its fastest \u2014 and left thoroughly enthused by what they saw. It is exactly the kind of energy that the support of partners like Aptitude helps to create.\n\nA PSA Challenger of this scale doesn't happen in Madrid without backing from sponsors who believe in the event, and we're grateful to have Aptitude alongside us. Our thanks to the whole team for their support \u2014 and for joining us at the glass court to share in the occasion.", "body_es": "El Madrid Squash Open tuvo el placer de recibir esta semana al equipo de Aptitude en el Polideportivo de la Luz, cuando uno de los patrocinadores del torneo se acerc\u00f3 a pie de pista para disfrutar de la acci\u00f3n en la pista de cristal.\n\nAcompa\u00f1ados por una afici\u00f3n de Tres Cantos entregada, el equipo de Aptitude vivi\u00f3 de cerca el squash profesional en su versi\u00f3n m\u00e1s r\u00e1pida, y se march\u00f3 entusiasmado con lo que vio. Es precisamente esa energ\u00eda la que ayuda a generar el apoyo de patrocinadores como Aptitude.\n\nUn Challenger del PSA de esta envergadura no es posible en Madrid sin el respaldo de patrocinadores que creen en el evento, y estamos agradecidos de contar con Aptitude a nuestro lado. Gracias a todo el equipo por su apoyo, y por acompa\u00f1arnos en la pista de cristal para compartir la ocasi\u00f3n."}, "/news/2026-06-24-day-2.json": {"slug": "2026-06-24-day-2", "date": "2026-06-24", "title_en": "Three seeds fall as Garc\u00eda Poll\u00e1n stuns P\u00e9rez in front of home crowd", "title_es": "Tres cabezas de serie caen mientras Garc\u00eda Poll\u00e1n deja fuera a P\u00e9rez ante su afici\u00f3n", "summary_en": "The Round of 16 blew the bottom half of the draw open. No.2 Iv\u00e1n P\u00e9rez was sent out of his own tournament by compatriot Sergio Garc\u00eda Poll\u00e1n in the match of the night.", "summary_es": "Los octavos abrieron de par en par la parte baja del cuadro. El n\u00famero 2 Iv\u00e1n P\u00e9rez fue eliminado de su propio torneo por su compatriota Sergio Garc\u00eda Poll\u00e1n en el partido de la noche.", "hero_image": "garcia-pollan-interview.jpg", "images": [{"file": "garcia-pollan-perez-scoreboard.jpg", "caption_en": "The final scoreline: Garc\u00eda Poll\u00e1n 3, P\u00e9rez 1 (10-12, 11-3, 11-6, 11-5) in 83 minutes.", "caption_es": "El marcador final: Garc\u00eda Poll\u00e1n 3, P\u00e9rez 1 (10-12, 11-3, 11-6, 11-5) en 83 minutos."}], "source_url": "", "source_label_en": "", "source_label_es": "", "body_en": "The Round of 16 produced the kind of drama that defines tournament squash. Three seeded players are out \u2014 including no.2 Iv\u00e1n P\u00e9rez, dispatched by his Spanish compatriot Sergio Garc\u00eda Poll\u00e1n in the match of the night \u2014 and the bottom half of the draw has been blown open ahead of Thursday's quarter-finals.\n\nGarc\u00eda Poll\u00e1n's win was the headline. The home wildcard and the second seed traded blows for 27 minutes in a gruelling opening game that P\u00e9rez eventually edged 12-10 \u2014 but that was as good as it got for the favourite. Garc\u00eda Poll\u00e1n answered with three commanding games, 11-3, 11-6, 11-5, to send P\u00e9rez out of his own tournament in 83 minutes. The Polideportivo erupted at match ball. Garc\u00eda Poll\u00e1n now meets no.8 seed Mac\u00e9o Levy in the quarter-finals, with a semi-final place within reach.\n\nThe two other upsets fell either side of the headline match. England's Will Salter beat the no.3 seed Muhammad Asim Khan 11-9, 11-5, 11-4 in a performance that grew in authority through the match. And the Czech Marek Pan\u00e1\u010dek followed his Day 1 win with another straight-games victory, this time over no.6 seed Yassin Elshafei, 11-9, 11-5, 11-2 \u2014 the Egyptian managing only 16 points across the three games.\n\nAt the top of the draw, Henry Leung was imperious. The no.1 seed conceded just 17 points across his three-game win over Abdelrahman Nassar (11-8, 11-1, 11-8) and looks every bit the favourite for the title. Matthew Lai (7) needed four games to subdue Salim Khan, the American taking game three before the Hong Kong seed closed out 3-1.\n\nIn the bottom half, Mohamed Nasser (4) and Leandro Romiglio (5) both progressed in four games \u2014 Nasser surviving a fightback from Phinera, Romiglio doing the same against Sheikh \u2014 to set up a quarter-final between them. Levy completed the seeded contingent's progression by overcoming Jared Carter in four.\n\n**Thursday's quarter-finals:**\n\n- 18:00 \u2014 H. Leung (1) vs M. Pan\u00e1\u010dek\n- 18:45 (est.) \u2014 M. Lai (7) vs W. Salter\n- 20:00 \u2014 M. Nasser (4) vs L. Romiglio (5)\n- 20:45 (est.) \u2014 M. Levy (8) vs S. Garc\u00eda Poll\u00e1n", "body_es": "Los octavos de final dejaron el tipo de dramatismo que define un torneo de squash. Tres cabezas de serie est\u00e1n fuera \u2014incluido el n\u00famero 2 Iv\u00e1n P\u00e9rez, eliminado por su compatriota Sergio Garc\u00eda Poll\u00e1n en el partido de la noche\u2014 y la parte baja del cuadro queda abierta de cara a los cuartos del jueves.\n\nLa victoria de Garc\u00eda Poll\u00e1n fue el titular. El invitado local y el segundo cabeza de serie intercambiaron golpes durante 27 minutos en un dur\u00edsimo primer juego que P\u00e9rez acab\u00f3 llev\u00e1ndose por 12-10, pero ah\u00ed se acab\u00f3 la fiesta para el favorito. Garc\u00eda Poll\u00e1n respondi\u00f3 con tres juegos contundentes, 11-3, 11-6, 11-5, para dejar fuera a P\u00e9rez de su propio torneo en 83 minutos. El Polideportivo estall\u00f3 en el punto de partido. Garc\u00eda Poll\u00e1n se enfrentar\u00e1 ahora al cabeza de serie n\u00famero ocho Mac\u00e9o Levy en cuartos, con la semifinal al alcance.\n\nLos otros dos sorpresones se produjeron a uno y otro lado del partido estelar. El ingl\u00e9s Will Salter venci\u00f3 al tercer cabeza de serie Muhammad Asim Khan por 11-9, 11-5, 11-4 en una actuaci\u00f3n que fue ganando autoridad a medida que avanzaba el partido. Y el checo Marek Pan\u00e1\u010dek encaden\u00f3 su victoria de la primera jornada con otro 3-0, esta vez ante el sexto cabeza de serie Yassin Elshafei, por 11-9, 11-5, 11-2 \u2014el egipcio apenas logr\u00f3 16 puntos en los tres juegos\u2014.\n\nEn la parte alta del cuadro, Henry Leung fue imponente. El primer cabeza de serie cedi\u00f3 \u00fanicamente 17 puntos en su victoria por tres juegos sobre Abdelrahman Nassar (11-8, 11-1, 11-8) y se confirma como gran favorito al t\u00edtulo. Matthew Lai (7) necesit\u00f3 cuatro juegos para someter a Salim Khan, llev\u00e1ndose el estadounidense el tercero antes de que el hongkon\u00e9s cerrara el partido 3-1.\n\nEn la parte baja, Mohamed Nasser (4) y Leandro Romiglio (5) avanzaron ambos en cuatro juegos \u2014Nasser sobreviviendo a la reacci\u00f3n de Phinera, Romiglio haciendo lo propio ante Sheikh\u2014 preparando as\u00ed su duelo de cuartos. Levy complet\u00f3 la progresi\u00f3n de los cabezas de serie superando a Jared Carter en cuatro juegos.\n\n**Cuartos de final del jueves:**\n\n- 18:00 \u2014 H. Leung (1) vs M. Pan\u00e1\u010dek\n- 18:45 (est.) \u2014 M. Lai (7) vs W. Salter\n- 20:00 \u2014 M. Nasser (4) vs L. Romiglio (5)\n- 20:45 (est.) \u2014 M. Levy (8) vs S. Garc\u00eda Poll\u00e1n", "category_en": "Day 2", "category_es": "Jornada 2"}, "/news/2026-06-23-day-1.json": {"slug": "2026-06-23-day-1", "date": "2026-06-23", "title_en": "Two five-set thrillers light up Day 1 as Garc\u00eda Poll\u00e1n sets up a shot at P\u00e9rez", "title_es": "Dos partidos a cinco juegos encienden la primera jornada; Garc\u00eda Poll\u00e1n se cita con P\u00e9rez", "summary_en": "Sixteen first-round matches opened the tournament. The day belonged to the unseeded contenders, with two five-game thrillers and a clean sweep from local favourite Sergio Garc\u00eda Poll\u00e1n.", "summary_es": "Diecis\u00e9is partidos de primera ronda abrieron el torneo. La jornada fue de los no cabezas de serie, con dos partidos a cinco juegos y una contundente victoria del favorito local Sergio Garc\u00eda Poll\u00e1n.", "hero_image": "day-1-glass-court-crowd.jpg", "images": [], "source_url": "", "source_label_en": "", "source_label_es": "", "body_en": "The Madrid Squash Open 2026 got under way on the glass court at the Polideportivo de la Luz with sixteen first-round matches across eight scheduled slots, the top eight seeds receiving byes into the Round of 16. The day belonged to the unseeded contenders, with two five-game encounters and a clean sweep from local favourite Sergio Garc\u00eda Poll\u00e1n giving the Tres Cantos crowd plenty to follow.\n\nIn the opening match of the tournament, Spanish wildcard Ignacio Fajardo took a competitive game off the experienced Abdelrahman Nassar but couldn't sustain his level. The Egyptian closed out 11-5, 11-13, 11-7, 11-1 to claim the first R16 berth of the week.\n\nDay 1's two five-setters came back-to-back in the afternoon slots. Salim Khan of the United States edged Matteo Carrouget of France in a 3-2 thriller (6-11, 11-8, 13-11, 7-11, 11-8), recovering twice from being behind on the scoreboard. Joshua Phinera then matched the drama against Spanish wildcard Pascal Gomez, the Frenchman taking the deciding game 11-9 after Gomez had levelled at two games apiece.\n\nThe evening session belonged to Garc\u00eda Poll\u00e1n. The Spanish unseeded entry produced the cleanest performance of the day, defeating Joeri Hapers 11-4, 12-10, 11-5 in front of a vocal home crowd. With the no.2 seed Iv\u00e1n P\u00e9rez waiting in the next round, Sergio's name was already drawing attention on the order of play sheet.\n\nElsewhere in R1, the Czech Marek Pan\u00e1\u010dek dispatched Brice Nicolas in straight games, Yusuf Sheikh of England did the same to Ibrahim Elkabbani, and Jared Carter ended Cristian Romero's wildcard run with a confident 3-0. Will Salter overcame the resilient Welshman Elliott Morris Devred 3-1 to complete the R1 picture.\n\nThe Round of 16 begins on Wednesday with all eight seeded players entering the draw.", "body_es": "El Madrid Squash Open 2026 se puso en marcha en la pista de cristal del Polideportivo de la Luz con diecis\u00e9is partidos de primera ronda repartidos en ocho franjas horarias, con los ocho cabezas de serie principales accediendo directamente a octavos. La jornada fue de los jugadores no cabezas de serie, con dos partidos a cinco juegos y una contundente victoria del favorito local Sergio Garc\u00eda Poll\u00e1n que dio a la afici\u00f3n de Tres Cantos motivos para entusiasmarse.\n\nEn el partido inaugural del torneo, el invitado espa\u00f1ol Ignacio Fajardo logr\u00f3 imponerse en un juego ante el experimentado Abdelrahman Nassar, pero no pudo mantener su nivel. El egipcio se llev\u00f3 el partido 11-5, 11-13, 11-7, 11-1 y firm\u00f3 el primer billete de la semana a octavos.\n\nLos dos partidos a cinco juegos llegaron consecutivos en la franja vespertina. El estadounidense Salim Khan se impuso al franc\u00e9s Matteo Carrouget en un emocionante 3-2 (6-11, 11-8, 13-11, 7-11, 11-8), remontando dos veces desde una posici\u00f3n desfavorable en el marcador. Joshua Phinera mantuvo la tensi\u00f3n frente al invitado espa\u00f1ol Pascal Gomez, llev\u00e1ndose el franc\u00e9s el \u00faltimo juego 11-9 tras igualar Gomez a dos juegos.\n\nLa sesi\u00f3n de noche fue para Garc\u00eda Poll\u00e1n. El espa\u00f1ol, sin clasificaci\u00f3n previa en el cuadro principal, firm\u00f3 la actuaci\u00f3n m\u00e1s s\u00f3lida del d\u00eda al derrotar a Joeri Hapers por 11-4, 12-10, 11-5 ante una afici\u00f3n local entregada. Con el segundo cabeza de serie Iv\u00e1n P\u00e9rez esperando en la siguiente ronda, el nombre de Sergio ya empezaba a llamar la atenci\u00f3n en el cuadro.\n\nEn el resto de la primera ronda, el checo Marek Pan\u00e1\u010dek se deshizo de Brice Nicolas en tres juegos, el ingl\u00e9s Yusuf Sheikh hizo lo propio con Ibrahim Elkabbani, y Jared Carter termin\u00f3 con la aventura del invitado espa\u00f1ol Cristian Romero por 3-0. Will Salter super\u00f3 al resistente gal\u00e9s Elliott Morris Devred por 3-1, completando as\u00ed el cuadro de octavos.\n\nLos octavos arrancan este mi\u00e9rcoles con la entrada de los ocho cabezas de serie principales.", "category_en": "Day 1", "category_es": "Jornada 1"}, "/news/2026-06-22-opening-ceremony.json": {"slug": "2026-06-22-opening-ceremony", "date": "2026-06-22", "title_en": "Madrid Squash Open 2026 opens at Polideportivo de la Luz", "title_es": "El Madrid Squash Open 2026 arranca en el Polideportivo de la Luz", "summary_en": "The 2026 edition was officially inaugurated with civic dignitaries in attendance, launching a week of professional squash on Spain's only permanent glass court.", "summary_es": "La edici\u00f3n de 2026 fue inaugurada oficialmente con presencia institucional, dando inicio a una semana de squash profesional en la \u00fanica pista de cristal permanente de Espa\u00f1a.", "hero_image": "opening-ceremony-group.jpg", "images": [], "source_url": "https://www.telemadrid.es/programas/deportes-tn/Tres-Cantos-acoge-una-nueva-edicion-del-torneo-internacional-Madrid-Squash-Open-2026-2-2900729946--20260623033500.html", "source_label_en": "With thanks to TeleMadrid for their coverage of the opening ceremony.", "source_label_es": "Agradecemos a TeleMadrid su cobertura de la inauguraci\u00f3n.", "body_en": "The Madrid Squash Open 2026 was officially inaugurated yesterday evening at the Polideportivo de la Luz in Tres Cantos, marking the start of a week of professional squash that will run through Saturday 27 June. The tournament, now an established fixture on the PSA World Tour Challenger circuit, has drawn 24 professional players from five continents to the only permanent glass squash court in Spain.\n\nThe opening ceremony was led by tournament director Andrew Fraser and attended by Javier Ju\u00e1rez, First Deputy Mayor of Tres Cantos; Eduardo Lorca, Councillor for Sports; Alberto Tom\u00e9, Director General of Sports for the Comunidad de Madrid; and Bel\u00e9n Etchechoury, President of the Federaci\u00f3n Madrile\u00f1a de Squash. Their joint presence underscored the tournament's growing institutional standing within Spanish squash.\n\nSpeaking at the ceremony, Ju\u00e1rez reflected on the city's role as a recurring host for events of national and international scale. \"It is a source of pride that our city is once again hosting a top-level competition like this,\" he said. \"On one hand, it projects the image of our municipality beyond our borders; on the other, it reinforces our firm commitment to sport as a tool for community, health, and the promotion of values.\"\n\nThe 2026 edition will be broadcast in more than 100 countries, building on the international reach that has made Tres Cantos an increasingly recognisable name on the global squash calendar. Action begins today on the glass court with sixteen first-round matches, headlined by top seed Henry Leung of Hong Kong and home favourite Iv\u00e1n P\u00e9rez of Spain.", "body_es": "El Madrid Squash Open 2026 fue inaugurado oficialmente ayer por la tarde en el Polideportivo de la Luz de Tres Cantos, dando inicio a una semana de squash profesional que se prolongar\u00e1 hasta el s\u00e1bado 27 de junio. El torneo, ya consolidado dentro del circuito Challenger del PSA World Tour, re\u00fane en esta edici\u00f3n a 24 jugadores profesionales procedentes de los cinco continentes en la \u00fanica pista de squash de cristal permanente de Espa\u00f1a.\n\nEl acto inaugural, conducido por el director del torneo Andrew Fraser, cont\u00f3 con la presencia de Javier Ju\u00e1rez, primer teniente de alcalde de Tres Cantos; Eduardo Lorca, concejal de Deportes; Alberto Tom\u00e9, director general de Deportes de la Comunidad de Madrid; y Bel\u00e9n Etchechoury, presidenta de la Federaci\u00f3n Madrile\u00f1a de Squash. Su presencia conjunta refleja la creciente proyecci\u00f3n institucional del torneo dentro del squash espa\u00f1ol.\n\nDurante su intervenci\u00f3n, Ju\u00e1rez destac\u00f3 el papel de la ciudad como sede recurrente de eventos deportivos de proyecci\u00f3n nacional e internacional. \"Es un orgullo que nuestra ciudad vuelva a albergar una competici\u00f3n de primer nivel como esta,\" declar\u00f3. \"Por una parte, proyecta la imagen del municipio m\u00e1s all\u00e1 de nuestras fronteras y, por otra, contin\u00faa reforzando nuestro firme compromiso con el deporte como herramienta de convivencia, salud y promoci\u00f3n de valores.\"\n\nLa edici\u00f3n de 2026 ser\u00e1 retransmitida en m\u00e1s de un centenar de pa\u00edses, consolidando la presencia internacional que ha situado a Tres Cantos como un nombre cada vez m\u00e1s reconocido en el calendario mundial del squash. La acci\u00f3n comienza hoy en la pista de cristal con diecis\u00e9is partidos de primera ronda, encabezados por el cabeza de serie n\u00famero uno Henry Leung, de Hong Kong, y el favorito local Iv\u00e1n P\u00e9rez, de Espa\u00f1a.", "category_en": "Ceremony", "category_es": "Ceremonia"}};</script><script>(function(){var real=window.fetch;window.fetch=function(u){
+ var k=String(u).split('?')[0];
+ if(window.__PREVIEW__&&window.__PREVIEW__[k]!==undefined){
+   return Promise.resolve({ok:true,status:200,json:function(){return Promise.resolve(window.__PREVIEW__[k]);}});}
+ return real.apply(this,arguments);};})();</script><script>/* ===========================================================================
+ * news-hydrate.js  —  Madrid Squash Open news section
+ * ---------------------------------------------------------------------------
+ * Pure static, no Worker endpoint. Reads:
+ *   /news/index.json          manifest: { "articles": [slug, ...] }
+ *   /news/<slug>.json         one file per article
+ *   /images/news/<file>       hero + inline images
+ *
+ * Renders cards using the site's EXISTING card classes (news-card, news-img,
+ * news-body, news-date, news-headline, news-excerpt, news-category) so they
+ * look identical to the hard-coded cards, into #news-container. Clicking a
+ * card opens a full-article overlay. Deep-linkable via #news/<slug>.
+ *
+ * Language: auto-detects EN/ES (reads <html lang>, which setLang() already
+ * sets) and re-renders on change. setLang() also calls MSO_setNewsLang().
+ * ===========================================================================*/
+(function () {
+  "use strict";
+
+  var MANIFEST_URL = "/news/index.json";
+  var ARTICLE_URL = function (slug) { return "/news/" + slug + ".json"; };
+  var IMG_BASE = "/images/news/";
+
+  var STRINGS = {
+    en: { back: "Back to news", empty: "No news yet — check back during the tournament." },
+    es: { back: "Volver a noticias", empty: "Aún no hay noticias — vuelve durante el torneo." }
+  };
+
+  var state = { lang: "en", articles: [], loaded: false };
+
+  /* ---------- language ---------------------------------------------------- */
+  function detectLang() {
+    var h = (document.documentElement.getAttribute("lang") || "").toLowerCase();
+    if (h.indexOf("es") === 0) return "es";
+    if (typeof window.currentLang === "string" && window.currentLang.indexOf("es") === 0) return "es";
+    return "en";
+  }
+  function pick(obj, base) {
+    var v = obj[base + "_" + state.lang];
+    if (v === undefined || v === null || v === "") v = obj[base + "_en"];
+    return v || "";
+  }
+
+  /* ---------- tiny, safe markdown ----------------------------------------- */
+  function esc(s) {
+    return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  }
+  function inline(s) {
+    s = esc(s);
+    s = s.replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g,
+      '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>');
+    s = s.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
+    s = s.replace(/(^|[^*])\*([^*]+)\*/g, "$1<em>$2</em>");
+    return s;
+  }
+  function markdown(src) {
+    if (!src) return "";
+    var blocks = String(src).replace(/\r\n/g, "\n").split(/\n{2,}/);
+    var html = "";
+    blocks.forEach(function (b) {
+      var lines = b.split("\n");
+      if (lines.every(function (l) { return /^\s*[-*]\s+/.test(l); })) {
+        html += "<ul>" + lines.map(function (l) {
+          return "<li>" + inline(l.replace(/^\s*[-*]\s+/, "")) + "</li>";
+        }).join("") + "</ul>";
+      } else if (/^#{1,6}\s/.test(lines[0])) {
+        var m = lines[0].match(/^(#{1,6})\s+(.*)$/);
+        var lvl = Math.min(m[1].length + 2, 6);
+        html += "<h" + lvl + ">" + inline(m[2]) + "</h" + lvl + ">";
+      } else {
+        html += "<p>" + lines.map(inline).join("<br>") + "</p>";
+      }
+    });
+    return html;
+  }
+
+  /* ---------- data -------------------------------------------------------- */
+  function fetchJSON(url) {
+    return fetch(url + (url.indexOf("?") < 0 ? "?v=" : "&v=") + Date.now(), { cache: "no-cache" })
+      .then(function (r) { if (!r.ok) throw new Error(url + " " + r.status); return r.json(); });
+  }
+  function load() {
+    return fetchJSON(MANIFEST_URL).then(function (m) {
+      var slugs = (m && m.articles) || [];
+      return Promise.all(slugs.map(function (slug) {
+        return fetchJSON(ARTICLE_URL(slug)).catch(function () { return null; });
+      }));
+    }).then(function (list) {
+      state.articles = list.filter(Boolean).sort(function (a, b) {
+        return (b.date || "").localeCompare(a.date || "");
+      });
+      state.loaded = true;
+    });
+  }
+  function fmtDate(iso) {
+    try {
+      return new Date(iso + "T12:00:00").toLocaleDateString(
+        state.lang === "es" ? "es-ES" : "en-GB",
+        { day: "numeric", month: "long", year: "numeric" });
+    } catch (e) { return iso; }
+  }
+
+  /* ---------- cards (native markup) --------------------------------------- */
+  function render() {
+    var root = document.getElementById("news-container");
+    if (!root) return;
+    if (!state.loaded) { return; }
+    if (!state.articles.length) {
+      root.innerHTML = '<p class="news-empty">' + STRINGS[state.lang].empty + "</p>";
+      return;
+    }
+    var grid = document.createElement("div");
+    grid.className = "news-grid";
+    state.articles.forEach(function (a) {
+      var card = document.createElement("article");
+      card.className = "news-card";
+      card.setAttribute("role", "button");
+      card.setAttribute("tabindex", "0");
+      var cat = pick(a, "category");
+      var media = a.hero_image
+        ? '<div class="news-img"><img src="' + IMG_BASE + esc(a.hero_image) +
+          '" alt="" class="news-img-inner" loading="lazy">' +
+          (cat ? '<span class="news-category">' + esc(cat) + "</span>" : "") + "</div>"
+        : '<div class="news-img news-img--placeholder">' +
+          (cat ? '<span class="news-category">' + esc(cat) + "</span>" : "") + "</div>";
+      card.innerHTML =
+        media +
+        '<div class="news-body">' +
+          '<div class="news-date">' + esc(fmtDate(a.date)) + "</div>" +
+          '<h3 class="news-headline">' + esc(pick(a, "title")) + "</h3>" +
+          '<p class="news-excerpt">' + esc(pick(a, "summary")) + "</p>" +
+        "</div>";
+      function open() { location.hash = "news/" + a.slug; }
+      card.addEventListener("click", open);
+      card.addEventListener("keydown", function (e) {
+        if (e.key === "Enter" || e.key === " ") { e.preventDefault(); open(); }
+      });
+      grid.appendChild(card);
+    });
+    root.innerHTML = "";
+    root.appendChild(grid);
+  }
+
+  /* ---------- article overlay -------------------------------------------- */
+  function overlayEl() {
+    var o = document.getElementById("news-overlay");
+    if (!o) {
+      o = document.createElement("div");
+      o.id = "news-overlay";
+      o.setAttribute("aria-hidden", "true");
+      o.innerHTML =
+        '<div class="news-overlay__backdrop" data-close></div>' +
+        '<div class="news-overlay__panel" role="dialog" aria-modal="true">' +
+          '<button class="news-overlay__close" data-close aria-label="Close">\u00d7</button>' +
+          '<div class="news-overlay__content"></div>' +
+        "</div>";
+      document.body.appendChild(o);
+      o.addEventListener("click", function (e) {
+        if (e.target.hasAttribute("data-close")) closeArticle();
+      });
+      document.addEventListener("keydown", function (e) {
+        if (e.key === "Escape" && o.classList.contains("is-open")) closeArticle();
+      });
+    }
+    return o;
+  }
+  function openArticle(slug) {
+    var a = state.articles.filter(function (x) { return x.slug === slug; })[0];
+    if (!a) return;
+    var o = overlayEl();
+    var c = o.querySelector(".news-overlay__content");
+    var hero = a.hero_image
+      ? '<figure class="news-article__hero"><img src="' + IMG_BASE + esc(a.hero_image) + '" alt=""></figure>'
+      : "";
+    var extra = (a.images || []).map(function (im) {
+      var cap = state.lang === "es" ? (im.caption_es || im.caption_en) : (im.caption_en || im.caption_es);
+      return '<figure class="news-article__figure"><img src="' + IMG_BASE + esc(im.file) + '" alt="">' +
+        (cap ? "<figcaption>" + esc(cap) + "</figcaption>" : "") + "</figure>";
+    }).join("");
+    var srcLabel = state.lang === "es" ? a.source_label_es : a.source_label_en;
+    var src = "";
+    if (srcLabel) {
+      src = '<p class="news-article__source">' +
+        (a.source_url ? '<a href="' + esc(a.source_url) + '" target="_blank" rel="noopener noreferrer">' + esc(srcLabel) + "</a>" : esc(srcLabel)) +
+        "</p>";
+    }
+    // NB: back is a <button>, not an <a href="#"> — the site's global click
+    // handler hijacks every "#" link, so a button avoids that entirely.
+    c.innerHTML =
+      '<button class="news-article__back" type="button">\u2190 ' + STRINGS[state.lang].back + "</button>" +
+      '<span class="news-article__date">' + esc(fmtDate(a.date)) + "</span>" +
+      '<h1 class="news-article__title">' + esc(pick(a, "title")) + "</h1>" +
+      hero +
+      '<div class="news-article__body">' + markdown(pick(a, "body")) + "</div>" +
+      extra + src;
+    c.querySelector(".news-article__back").addEventListener("click", closeArticle);
+    c.scrollTop = 0;
+    o.classList.add("is-open");
+    o.setAttribute("aria-hidden", "false");
+    document.body.classList.add("news-noscroll");
+  }
+  function closeArticle() {
+    var o = document.getElementById("news-overlay");
+    if (o) { o.classList.remove("is-open"); o.setAttribute("aria-hidden", "true"); }
+    document.body.classList.remove("news-noscroll");
+    if (/^#news\//.test(location.hash)) {
+      if (history.pushState) history.pushState(null, "", "#news");
+      else location.hash = "news";
+    }
+  }
+
+  /* ---------- routing ----------------------------------------------------- */
+  function route() {
+    var m = location.hash.match(/^#news\/(.+)$/);
+    if (m && state.loaded) openArticle(decodeURIComponent(m[1]));
+    else closeArticle();
+  }
+
+  /* ---------- language wiring -------------------------------------------- */
+  window.MSO_setNewsLang = function (lang) {
+    lang = (lang || "").toLowerCase().indexOf("es") === 0 ? "es" : "en";
+    if (lang === state.lang) return;
+    state.lang = lang;
+    render();
+    if (/^#news\//.test(location.hash)) route();
+  };
+  try {
+    new MutationObserver(function () {
+      var l = detectLang();
+      if (l !== state.lang) window.MSO_setNewsLang(l);
+    }).observe(document.documentElement, { attributes: true, attributeFilter: ["lang"] });
+  } catch (e) {}
+
+  /* ---------- boot -------------------------------------------------------- */
+  function boot() {
+    state.lang = detectLang();
+    load().then(function () { render(); route(); }).catch(function (err) {
+      console.error("[news] load failed", err);
+      var root = document.getElementById("news-container");
+      if (root) root.innerHTML = '<p class="news-empty">' + STRINGS[state.lang].empty + "</p>";
+    });
+    window.addEventListener("hashchange", route);
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot);
+  else boot();
+})();
+</script>
+<script>
+var cur='en';
+document.getElementById('lang').addEventListener('click',function(){
+ cur=cur==='en'?'es':'en';
+ document.documentElement.setAttribute('lang',cur);
+ window.MSO_setNewsLang(cur);
+ this.textContent=cur==='en'?'Ver en Español':'View in English';
+ document.getElementById('lbl').textContent=cur==='en'?'Latest News':'Últimas Noticias';
+ document.getElementById('hd').innerHTML=cur==='en'?'News &amp; Updates':'Noticias y Novedades';
+});
+</script></body></html>

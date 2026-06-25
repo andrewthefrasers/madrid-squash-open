@@ -1,0 +1,124 @@
+/* ===========================================================================
+ * news-styles.css  —  Madrid Squash Open
+ * The dynamic cards reuse the site's existing .news-card / .news-img / etc.,
+ * so this file only adds the full-article OVERLAY and a hero placeholder.
+ * Everything below uses the site's own custom properties (--navy, --accent…)
+ * and fonts (Bebas Neue / Barlow / Barlow Condensed) so it matches natively.
+ * ===========================================================================*/
+
+/* Make dynamic cards behave as buttons */
+#news-container .news-card { cursor: pointer; }
+#news-container .news-card:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--accent, #00a8e8);
+}
+.news-empty { color: var(--muted, #7ba0bb); font-style: italic; }
+
+/* Hero placeholder when an article has no image */
+.news-img--placeholder {
+  background:
+    radial-gradient(120% 140% at 50% 0%, var(--navy3, #003c66), var(--navy, #001b2d));
+  position: relative;
+}
+.news-img--placeholder::after {
+  content: "MADRID SQUASH OPEN";
+  position: absolute; inset: 0; display: grid; place-items: center;
+  font-family: "Bebas Neue", sans-serif; letter-spacing: .14em;
+  color: rgba(216, 232, 244, .18); font-size: 1.1rem;
+}
+
+/* ---- overlay ----------------------------------------------------------- */
+.news-noscroll { overflow: hidden; }
+#news-overlay { position: fixed; inset: 0; z-index: 4000; display: none; }
+#news-overlay.is-open { display: block; }
+.news-overlay__backdrop {
+  position: absolute; inset: 0;
+  background: rgba(0, 12, 22, .82); backdrop-filter: blur(3px);
+}
+.news-overlay__panel {
+  position: absolute; inset: 0;
+  width: 100%; max-height: 100%;
+  background: var(--navy2, #002d4c);
+  color: var(--text, #d8e8f4);
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+}
+@media (min-width: 760px) {
+  .news-overlay__panel {
+    inset: 4vh auto; left: 50%; transform: translateX(-50%);
+    width: min(760px, 92vw); max-height: 92vh;
+    border-radius: 8px;
+    box-shadow: 0 30px 80px rgba(0, 0, 0, .55);
+    border: 1px solid rgba(255, 255, 255, .08);
+  }
+}
+.news-overlay__close {
+  position: sticky; top: 14px; float: right;
+  margin: 14px 14px -3rem 0;
+  width: 42px; height: 42px; border: 0; border-radius: 50%;
+  background: rgba(0, 27, 45, .85); color: #fff;
+  font-size: 1.6rem; line-height: 1; cursor: pointer; z-index: 2;
+  transition: background .2s var(--ease, ease);
+}
+.news-overlay__close:hover { background: var(--accent, #00a8e8); color: var(--navy, #001b2d); }
+.news-overlay__content { padding: 1.6rem 1.4rem 2.6rem; }
+@media (min-width: 760px) { .news-overlay__content { padding: 2.4rem 2.8rem 3rem; } }
+
+/* ---- article ----------------------------------------------------------- */
+.news-article__back {
+  display: inline-block; margin-bottom: 1.3rem; padding: 0;
+  background: none; border: 0; cursor: pointer;
+  font-family: "Barlow Condensed", sans-serif; font-weight: 700;
+  font-size: .82rem; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--accent, #00a8e8);
+}
+.news-article__back:hover { color: var(--gold, #f0c330); }
+.news-article__date {
+  display: block; font-family: "Barlow Condensed", sans-serif; font-weight: 700;
+  font-size: .74rem; letter-spacing: .2em; text-transform: uppercase;
+  color: var(--gold, #f0c330); margin-bottom: .5rem;
+}
+.news-article__title {
+  font-family: "Bebas Neue", sans-serif; font-weight: 400;
+  font-size: clamp(2rem, 5.5vw, 3rem); line-height: 1.02;
+  color: var(--white, #fff); margin: 0 0 1.4rem;
+}
+.news-article__hero { margin: 0 0 1.6rem; border-radius: 6px; overflow: hidden; }
+.news-article__hero img { width: 100%; display: block; }
+.news-article__body {
+  font-family: "Barlow", sans-serif; font-size: 1.02rem; line-height: 1.72;
+  color: var(--text, #d8e8f4);
+}
+.news-article__body p { margin: 0 0 1.05rem; }
+.news-article__body strong { color: var(--white, #fff); font-weight: 700; }
+.news-article__body em { color: #eaf4fb; }
+.news-article__body a { color: var(--accent, #00a8e8); }
+.news-article__body h3, .news-article__body h4 {
+  font-family: "Barlow Condensed", sans-serif; font-weight: 700;
+  color: var(--white, #fff); letter-spacing: .02em;
+  margin: 1.7rem 0 .6rem; font-size: 1.15rem;
+}
+.news-article__body ul { margin: .2rem 0 1.2rem; padding: 0; list-style: none; }
+.news-article__body li {
+  padding: .5rem .9rem; margin-bottom: .4rem;
+  background: rgba(0, 168, 232, .08);
+  border-left: 3px solid var(--accent, #00a8e8);
+  border-radius: 0 4px 4px 0;
+  font-variant-numeric: tabular-nums;
+}
+.news-article__figure { margin: 1.7rem 0; }
+.news-article__figure img { width: 100%; border-radius: 6px; display: block; }
+.news-article__figure figcaption {
+  margin-top: .5rem; font-size: .82rem; font-style: italic;
+  color: var(--muted, #7ba0bb);
+}
+.news-article__source {
+  margin-top: 2rem; padding-top: 1.1rem;
+  border-top: 1px solid rgba(255, 255, 255, .12);
+  font-size: .85rem; color: var(--muted, #7ba0bb);
+}
+.news-article__source a { color: var(--accent, #00a8e8); }
+
+@media (prefers-reduced-motion: reduce) {
+  .news-overlay__close { transition: none; }
+}
