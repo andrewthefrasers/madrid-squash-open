@@ -1,0 +1,79 @@
+/* ===========================================================================
+ * gallery-styles.css  —  Madrid Squash Open photo gallery
+ * Responsive grid that scales to any number of photos, keeping the site's
+ * cyan-hover/zoom look, plus a dark lightbox. Uses the site's own tokens.
+ * Scoped under #gallery-container / #gal-lightbox.
+ * ===========================================================================*/
+
+/* ---- grid -------------------------------------------------------------- */
+#gallery-container .gal-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 4px;
+}
+@media (max-width: 680px) {
+  #gallery-container .gal-grid { grid-template-columns: 1fr 1fr; }
+}
+.gal-cell {
+  position: relative; overflow: hidden; cursor: pointer;
+  background: var(--navy2, #002d4c); aspect-ratio: 3 / 2;
+}
+.gal-cell img {
+  width: 100%; height: 100%; object-fit: cover; display: block;
+  transition: transform .5s var(--ease, ease);
+}
+.gal-cell:hover img { transform: scale(1.07); }
+.gal-cell::after {
+  content: ""; position: absolute; inset: 0;
+  background: rgba(0, 168, 232, 0); transition: background .3s;
+}
+.gal-cell:hover::after { background: rgba(0, 168, 232, .25); }
+.gal-cell:focus-visible { outline: 3px solid var(--accent, #00a8e8); outline-offset: -3px; }
+
+/* ---- lightbox ---------------------------------------------------------- */
+.gal-noscroll { overflow: hidden; }
+#gal-lightbox { position: fixed; inset: 0; z-index: 5000; display: none; }
+#gal-lightbox.is-open { display: block; }
+.gal-lb__backdrop { position: absolute; inset: 0; background: rgba(0, 10, 20, .9); }
+.gal-lb__figure {
+  position: absolute; inset: 0; margin: auto; z-index: 1;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 14px; padding: 4vh 7vw; pointer-events: none;
+}
+.gal-lb__img {
+  max-width: 100%; max-height: 82vh; object-fit: contain;
+  border-radius: 4px; box-shadow: 0 24px 70px rgba(0, 0, 0, .6); pointer-events: auto;
+}
+.gal-lb__cap {
+  color: var(--text, #d8e8f4); font-family: "Barlow", sans-serif; font-size: .92rem;
+  text-align: center; max-width: 60ch; pointer-events: auto;
+}
+.gal-lb__count {
+  position: absolute; bottom: 18px; left: 50%; transform: translateX(-50%); z-index: 2;
+  color: var(--muted, #7ba0bb); font-family: "Barlow Condensed", sans-serif;
+  letter-spacing: .14em; font-size: .8rem;
+}
+.gal-lb__close, .gal-lb__nav {
+  position: absolute; z-index: 3; border: 0; cursor: pointer;
+  background: rgba(0, 27, 45, .7); color: #fff;
+  transition: background .2s var(--ease, ease);
+}
+.gal-lb__close:hover, .gal-lb__nav:hover { background: var(--accent, #00a8e8); color: var(--navy, #001b2d); }
+.gal-lb__close {
+  top: 16px; right: 18px; width: 44px; height: 44px; border-radius: 50%;
+  font-size: 1.7rem; line-height: 1;
+}
+.gal-lb__nav {
+  top: 50%; transform: translateY(-50%);
+  width: 52px; height: 64px; border-radius: 6px; font-size: 2.4rem; line-height: 1;
+}
+.gal-lb__prev { left: 14px; }
+.gal-lb__next { right: 14px; }
+@media (max-width: 680px) {
+  .gal-lb__nav { width: 40px; height: 52px; font-size: 1.8rem; }
+  .gal-lb__prev { left: 6px; } .gal-lb__next { right: 6px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gal-cell img, .gal-lb__close, .gal-lb__nav { transition: none; }
+}

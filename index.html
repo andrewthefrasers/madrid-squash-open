@@ -17,6 +17,7 @@
   <link rel="manifest" href="/site.webmanifest"/>
   <meta name="theme-color" content="#001b2d"/>
   <link rel="stylesheet" href="/replays-styles.css"/>
+  <link rel="stylesheet" href="/gallery-styles.css"/>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
@@ -1123,14 +1124,7 @@
         <a href="https://www.instagram.com/madridsquashopen/" target="_blank" class="btn btn-outline" data-en="View All on Instagram" data-es="Ver Todo en Instagram">View All on Instagram</a>
       </div>
     </div>
-    <div class="gallery-grid">
-      <div class="gallery-item"><div class="g-placeholder"><img src="images/Galeria1.jpg" alt="Players on Court 1"></div></div>
-      <div class="gallery-item"><div class="g-placeholder"><img src="images/Galeria2.jpg" alt="Tres Cantos"></div></div>
-      <div class="gallery-item"><div class="g-placeholder"><img src="images/Galeria3.jpg" alt="Players on Court 2"></div></div>
-      <div class="gallery-item"><div class="g-placeholder"><img src="images/Galeria4.jpg" alt="Mountain Range"></div></div>
-      <div class="gallery-item"><div class="g-placeholder"><img src="images/Galeria5.jpg" alt="Club Team"></div></div>
-      <div class="gallery-item"><div class="g-placeholder"><img src="images/Galeria6.jpg" alt="Madrid Towers"></div></div>
-    </div>
+    <div id="gallery-container"></div>
   </div>
   <div class="instagram-strip">
     <div class="container">
@@ -1474,5 +1468,6 @@ if (hamburger && mobileNav) {
 <script src="/draw-hydrate.js" defer></script>
 <script src="/news-hydrate.js" defer></script>
 <script src="/replays-hydrate.js" defer></script>
+<script src="/gallery-hydrate.js" defer></script>
 </body>
 </html>
