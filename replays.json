@@ -1,0 +1,44 @@
+{
+  "videos": [
+    {
+      "youtube_id": "",
+      "date": "2026-06-25",
+      "title_en": "Quarter-Finals",
+      "title_es": "Cuartos de Final",
+      "label_en": "Thu 25 June",
+      "label_es": "Jue 25 Jun"
+    },
+    {
+      "youtube_id": "OV2srx3k1FA",
+      "date": "2026-06-24",
+      "title_en": "Round of 16 — Session 1",
+      "title_es": "Octavos — Sesión 1",
+      "label_en": "Wed 24 June",
+      "label_es": "Mié 24 Jun"
+    },
+    {
+      "youtube_id": "lziNqpo1-fo",
+      "date": "2026-06-24",
+      "title_en": "Round of 16 — Session 2",
+      "title_es": "Octavos — Sesión 2",
+      "label_en": "Wed 24 June",
+      "label_es": "Mié 24 Jun"
+    },
+    {
+      "youtube_id": "gOmr_tdFlWw",
+      "date": "2026-06-23",
+      "title_en": "Round 1 — Session 1",
+      "title_es": "Primera Ronda — Sesión 1",
+      "label_en": "Tue 23 June",
+      "label_es": "Mar 23 Jun"
+    },
+    {
+      "youtube_id": "eYbunQvfUh0",
+      "date": "2026-06-23",
+      "title_en": "Round 1 — Session 2",
+      "title_es": "Primera Ronda — Sesión 2",
+      "label_en": "Tue 23 June",
+      "label_es": "Mar 23 Jun"
+    }
+  ]
+}
