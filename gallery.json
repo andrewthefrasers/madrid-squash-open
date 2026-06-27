@@ -132,41 +132,5 @@
       "caption_en": "",
       "caption_es": ""
     },
-    {
-      "src": "/images/Galeria1.jpg",
-      "alt": "Players on court",
-      "caption_en": "Players on Court 1",
-      "caption_es": "Jugadores en la pista 1"
-    },
-    {
-      "src": "/images/Galeria2.jpg",
-      "alt": "Tres Cantos",
-      "caption_en": "Tres Cantos",
-      "caption_es": "Tres Cantos"
-    },
-    {
-      "src": "/images/Galeria3.jpg",
-      "alt": "Players on court",
-      "caption_en": "Players on Court 2",
-      "caption_es": "Jugadores en la pista 2"
-    },
-    {
-      "src": "/images/Galeria4.jpg",
-      "alt": "Sierra",
-      "caption_en": "Mountain range",
-      "caption_es": "Sierra"
-    },
-    {
-      "src": "/images/Galeria5.jpg",
-      "alt": "Club team",
-      "caption_en": "Club team",
-      "caption_es": "Equipo del club"
-    },
-    {
-      "src": "/images/Galeria6.jpg",
-      "alt": "Madrid towers",
-      "caption_en": "Madrid towers",
-      "caption_es": "Torres de Madrid"
-    }
   ]
 }
