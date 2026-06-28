@@ -1,0 +1,16 @@
+# Git internals — THIS is what caused the "Asset too large" deploy error.
+.git
+.github
+
+# Build tooling / source — not part of the served website
+tools
+node_modules
+src
+wrangler.jsonc
+wrangler.toml
+package.json
+package-lock.json
+.assetsignore
+
+# Docs / notes — never served
+*.md
