@@ -1,5 +1,21 @@
 {
   "videos": [
+        {
+      "youtube_id": "GP5WHjqW-18",
+      "date": "2026-06-27",
+      "title_en": "Final",
+      "title_es": "Final",
+      "label_en": "Sat 27 June",
+      "label_es": "Sab 27 Jun"
+    },
+    {
+      "youtube_id": "zzmgy5pyE9g&t",
+      "date": "2026-06-26",
+      "title_en": "Semi-Finals",
+      "title_es": "Semi-Finales",
+      "label_en": "Fri 26 June",
+      "label_es": "Vie 26 Jun"
+    },
     {
       "youtube_id": "ZnHMgAmTZMI",
       "date": "2026-06-25",
