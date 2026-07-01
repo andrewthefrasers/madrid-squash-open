@@ -564,7 +564,7 @@
 <section id="hero">
   <div class="hero-bg"></div>
   <div class="hero-poster">
-    <img src="images/hero-action.jpg" alt="Professional squash player in action at the Madrid Squash Open" loading="eager"/>
+    <img src="images/post-tournament-poster.jpg" alt="Professional squash player in action at the Madrid Squash Open" loading="eager"/>
   </div>
   <div class="container hero-content">
     <div class="hero-eyebrow">
@@ -597,7 +597,7 @@
       <a href="#draw" class="btn btn-accent" data-en="🏆 View Results" data-es="🏆 Ver Resultados">🏆 View Results</a>
       <a href="#about" class="btn btn-outline" data-en="Tournament Info" data-es="Info del Torneo">Tournament Info</a>
     </div>
-    <div id="countdown">
+    <div id="countdown" style="display:none;">
       <div class="cd-item"><span class="cd-num" id="cd-days">--</span><span class="cd-label" data-en="Days" data-es="Días">Days</span></div>
       <div class="cd-item"><span class="cd-num" id="cd-hours">--</span><span class="cd-label" data-en="Hours" data-es="Horas">Hours</span></div>
       <div class="cd-item"><span class="cd-num" id="cd-mins">--</span><span class="cd-label" data-en="Mins" data-es="Mins">Mins</span></div>
@@ -1311,7 +1311,7 @@ const EVENT_DATE = new Date("2026-06-23T12:00:00");
 function pad(n) { return String(n).padStart(2,"0"); }
 function updateCd() {
   const d = EVENT_DATE - new Date();
-  if (d <= 0) { document.getElementById("countdown").innerHTML = '<div class="cd-item"><span class="cd-num" style="font-size:1.2rem;line-height:1.2">LIVE!</span></div>'; return; }
+  if (d <= 0) { document.getElementById("countdown").style.display = "none"; return; }
   document.getElementById("cd-days").textContent  = pad(Math.floor(d/86400000));
   document.getElementById("cd-hours").textContent = pad(Math.floor(d%86400000/3600000));
   document.getElementById("cd-mins").textContent  = pad(Math.floor(d%3600000/60000));
